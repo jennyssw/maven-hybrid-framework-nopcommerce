@@ -1,0 +1,5 @@
+package commons;
+
+public enum BrowserList {
+	CHROME, CHROME_HEADLESS, FIREFOX, FIREFOX_HEADLESS, COC_COC, EDGE, IE, SAFARI, OPERA;
+}
