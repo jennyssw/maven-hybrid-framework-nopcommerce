@@ -280,8 +280,6 @@ public class BasePage {
 		return getWebElement(driver, castRestParameter(locator, values)).isDisplayed();
 	}
 
-	// Element Invisible In DOM
-	// Element Invisible Not In DOM
 	public boolean isElementUndisplayed(WebDriver driver, String locator) {
 		setImplicitTime(driver, shortTimeout);
 		List<WebElement> elements = getListElement(driver, locator);
