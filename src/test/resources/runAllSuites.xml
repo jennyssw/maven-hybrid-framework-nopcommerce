@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite parallel="false" name="Nopcommerce">
+
+	<suite-files>
+		<suite-file path="runOnFirefoxBrowser.xml" />
+		<suite-file path="runOnChromeBrowser.xml" />
+		<suite-file path="runOnEdgeBrowser.xml" />
+	</suite-files>
+
+</suite>
