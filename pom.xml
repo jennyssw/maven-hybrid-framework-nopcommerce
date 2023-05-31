@@ -7,19 +7,13 @@
 
 	<description>Maven Hybrid Automation UI Frameword</description>
 
-	<!-- Khai báo biến - Global Variable -->
 	<properties>
-		<!-- Encoding for Build/ Console -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-		<!-- Encoding for Report -->
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<!-- Compiler Code with Java 11 -->
 		<maven.compiler.target>11</maven.compiler.target>
 		<maven.compiler.source>11</maven.compiler.source>
 
-		<!-- Global variable for dependencies -->
 		<webdriver.version>3.141.59</webdriver.version>
 		<testng.version>6.14.3</testng.version>
 		<jackson.version>2.10.0</jackson.version>
@@ -32,16 +26,13 @@
 		<owner.version>1.0.10</owner.version>
 	</properties>
 
-	<!-- Quản lí thư viện -->
 	<dependencies>
-		<!-- TestNG -->
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>${testng.version}</version>
 		</dependency>
 
-		<!-- Selenium Java -->
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
@@ -155,33 +146,27 @@
 
 	</dependencies>
 
-	<!-- Compiler/ Run Test -->
 	<build>
 		<plugins>
-			<!-- Compiler -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.10.0</version>
-				<!-- Compiler code vs Java 11 -->
 				<configuration>
 					<source>11</source>
 					<target>11</target>
 				</configuration>
 			</plugin>
 
-			<!-- Run test -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.22.2</version>
 				<configuration>
-					<!-- Run TestNG xml file -->
 					<suiteXmlFiles>
 						<suiteXmlFile>src/test/resources/runAllSuites.xml</suiteXmlFile>
 					</suiteXmlFiles>
 
-					<!-- Argument -->
 					<argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
@@ -190,5 +175,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
