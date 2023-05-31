@@ -1,6 +1,10 @@
 package commons;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -184,12 +188,18 @@ public class BasePage {
 		return select.getFirstSelectedOption().getText();
 	}
 
+	public String getFirstSelectedTextItem(WebDriver driver, String locator, String... values) {
+		Select select = new Select(getWebElement(driver, castRestParameter(locator, values)));
+		return select.getFirstSelectedOption().getText();
+	}
+
 	public boolean isDropdownMultiple(WebDriver driver, String locator) {
 		Select select = new Select(getWebElement(driver, locator));
 		return select.isMultiple();
 	}
 
 	public void selectItemInDropdown(WebDriver driver, String parentXpath, String childXpath, String expectedTextItem) {
+		waitForElementClickable(driver, parentXpath);
 		getWebElement(driver, parentXpath).click();
 		sleepInSecond(2);
 
@@ -262,20 +272,16 @@ public class BasePage {
 		}
 	}
 
-	// Element Visible In DOM (1)
-	// Element Invisible In DOM (2.1)
 	public boolean isElementDisplayedInDOM(WebDriver driver, String locator) {
 		return getWebElement(driver, locator).isDisplayed();
 	}
 
-	// Element Visible In DOM (1)
-	// Element Invisible In DOM (2.1)
 	public boolean isElementDisplayedInDOM(WebDriver driver, String locator, String... values) {
 		return getWebElement(driver, castRestParameter(locator, values)).isDisplayed();
 	}
 
-	// Element Invisible In DOM (2.1)
-	// Element Invisible Not In DOM (2.2)
+	// Element Invisible In DOM
+	// Element Invisible Not In DOM
 	public boolean isElementUndisplayed(WebDriver driver, String locator) {
 		setImplicitTime(driver, shortTimeout);
 		List<WebElement> elements = getListElement(driver, locator);
@@ -318,6 +324,10 @@ public class BasePage {
 
 	public boolean isElementSelected(WebDriver driver, String locator) {
 		return getWebElement(driver, locator).isSelected();
+	}
+
+	public boolean isElementSelected(WebDriver driver, String locator, String... values) {
+		return getWebElement(driver, castRestParameter(locator, values)).isSelected();
 	}
 
 	public void sleepInSecond(long timeInSecond) {
@@ -465,6 +475,208 @@ public class BasePage {
 		}
 		fullFileName = fullFileName.trim();
 		getWebElement(driver, locator).sendKeys(fullFileName);
+	}
+
+	/** Common function for Web Component **/
+	public String getCurrentCalendar() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		sdf.format(c.getTime());
+		int month = c.get(Calendar.MONTH) + 1;
+		int day = c.get(Calendar.DAY_OF_MONTH);
+		int year = c.get(Calendar.YEAR);
+		Date date = c.getTime();
+		String monthString = Integer.toString(month);
+		String dayString = Integer.toString(day);
+		String yearString = Integer.toString(year);
+		String dateString = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime());
+
+		switch (monthString) {
+		case "1":
+			monthString = "Jan";
+			break;
+		case "2":
+			monthString = "Feb";
+			break;
+		case "3":
+			monthString = "Mar";
+			break;
+		case "4":
+			monthString = "Apr";
+			break;
+		case "5":
+			monthString = "May";
+			break;
+		case "6":
+			monthString = "June";
+			break;
+		case "7":
+			monthString = "July";
+			break;
+		case "8":
+			monthString = "Aug";
+			break;
+		case "9":
+			monthString = "Sep";
+			break;
+		case "10":
+			monthString = "Oct";
+			break;
+		case "11":
+			monthString = "Nov";
+			break;
+		case "12":
+			monthString = "Dec";
+			break;
+		default:
+			monthString = null;
+			break;
+		}
+
+		String currentCalendar = dateString + ", " + monthString + " " + dayString + ", " + yearString;
+		return currentCalendar;
+	}
+
+	public void enterToTextboxByID(WebDriver driver, String valueToInput, String textboxID) {
+		waitForElementVisible(driver, BasePageUI.DYNAMIC_TEXTBOX_BY_ID, textboxID);
+		sendkeyToElement(driver, BasePageUI.DYNAMIC_TEXTBOX_BY_ID, valueToInput, textboxID);
+	}
+
+	public String getTextValueInTextboxByID(WebDriver driver, String textboxID) {
+		waitForElementVisible(driver, BasePageUI.DYNAMIC_TEXTBOX_BY_ID, textboxID);
+		return getElementAttributeValue(driver, BasePageUI.DYNAMIC_TEXTBOX_BY_ID, "value", textboxID);
+	}
+
+	public void enterToTextareaByID(WebDriver driver, String valueToInput, String textareaID) {
+		waitForElementVisible(driver, BasePageUI.DYNAMIC_TEXTAREA_BY_ID, textareaID);
+		sendkeyToElement(driver, BasePageUI.DYNAMIC_TEXTAREA_BY_ID, valueToInput, textareaID);
+	}
+
+	public String getTextInTextareaByID(WebDriver driver, String textareaID) {
+		waitForElementVisible(driver, BasePageUI.DYNAMIC_TEXTAREA_BY_ID, textareaID);
+		return getElementText(driver, BasePageUI.DYNAMIC_TEXTAREA_BY_ID, textareaID);
+	}
+
+	public void selectItemInDefaultDropdownByID(WebDriver driver, String itemText, String dropdownID) {
+		waitForElementClickable(driver, BasePageUI.DYNAMIC_DROPDOWN_BY_ID, dropdownID);
+		selectItemInDefaultDropdown(driver, BasePageUI.DYNAMIC_DROPDOWN_BY_ID, itemText, dropdownID);
+	}
+
+	public void selectItemInDefaultDropdownByName(WebDriver driver, String itemText, String dropdownName) {
+		waitForElementClickable(driver, BasePageUI.DYNAMIC_DROPDOWN_BY_NAME, dropdownName);
+		selectItemInDefaultDropdown(driver, BasePageUI.DYNAMIC_DROPDOWN_BY_NAME, itemText, dropdownName);
+	}
+
+	public String getFirstSelectedTextInDefaultDropdownByID(WebDriver driver, String dropdownID) {
+		waitForElementVisible(driver, BasePageUI.DYNAMIC_DROPDOWN_BY_ID, dropdownID);
+		return getFirstSelectedTextItem(driver, BasePageUI.DYNAMIC_DROPDOWN_BY_ID, dropdownID);
+	}
+
+	public void clickToButtonByTitleText(WebDriver driver, String buttonTitle) {
+		waitForElementClickable(driver, BasePageUI.DYNAMIC_BUTTON_BY_TITLE_TEXT, buttonTitle);
+		clickToElement(driver, BasePageUI.DYNAMIC_BUTTON_BY_TITLE_TEXT, buttonTitle);
+	}
+
+	public void clickToButtonByTitleNormalizeSpace(WebDriver driver, String buttonTitle) {
+		waitForElementClickable(driver, BasePageUI.DYNAMIC_BUTTON_BY_TITLE_NORMALIZE_SPACE, buttonTitle);
+		clickToElement(driver, BasePageUI.DYNAMIC_BUTTON_BY_TITLE_NORMALIZE_SPACE, buttonTitle);
+		sleepInSecond(3);
+	}
+
+	public void clickToButtonByID(WebDriver driver, String buttonID) {
+		waitForElementClickable(driver, BasePageUI.DYNAMIC_BUTTON_BY_ID, buttonID);
+		clickToElement(driver, BasePageUI.DYNAMIC_BUTTON_BY_ID, buttonID);
+	}
+
+	public void clickToLinkByTitle(WebDriver driver, String linkTitle) {
+		waitForElementClickable(driver, BasePageUI.DYNAMIC_LINK_BY_TITLE, linkTitle);
+		clickToElement(driver, BasePageUI.DYNAMIC_LINK_BY_TITLE, linkTitle);
+	}
+
+	public void clickToLinkByClassName(WebDriver driver, String linkClassName) {
+		waitForElementClickable(driver, BasePageUI.DYNAMIC_LINK_BY_CLASS_NAME, linkClassName);
+		clickToElement(driver, BasePageUI.DYNAMIC_LINK_BY_CLASS_NAME, linkClassName);
+	}
+
+	public void hoverToMenuAndClickToSubmenuByTitle(WebDriver driver, String menuTitle, String submenuTitle) {
+		waitForElementVisible(driver, BasePageUI.DYNAMIC_WEB_MENU_BY_TITLE, menuTitle);
+		hoverMouseToElement(driver, BasePageUI.DYNAMIC_WEB_MENU_BY_TITLE, menuTitle);
+
+		waitForElementClickable(driver, BasePageUI.DYNAMIC_WEB_SUBMENU_BY_TITLE, menuTitle, submenuTitle);
+		clickToElement(driver, BasePageUI.DYNAMIC_WEB_SUBMENU_BY_TITLE, menuTitle, submenuTitle);
+	}
+
+	public void clickToRadioByClassName(WebDriver driver, String radioClassName) {
+		waitForElementClickable(driver, BasePageUI.DYNAMIC_RADIO_BY_CLASS_NAME, radioClassName);
+		checkToCheckboxOrRadio(driver, BasePageUI.DYNAMIC_RADIO_BY_CLASS_NAME, radioClassName);
+	}
+
+	public void isRadioByClassNameDisplayed(WebDriver driver, String radioClassName) {
+		waitForElementVisible(driver, BasePageUI.DYNAMIC_RADIO_BY_CLASS_NAME, radioClassName);
+		isElementSelected(driver, BasePageUI.DYNAMIC_RADIO_BY_CLASS_NAME, radioClassName);
+	}
+
+	public void clickToCheckboxByID(WebDriver driver, String checkboxID) {
+		waitForElementClickable(driver, BasePageUI.DYNAMIC_CHECKBOX_BY_ID, checkboxID);
+		checkToCheckboxOrRadio(driver, BasePageUI.DYNAMIC_CHECKBOX_BY_ID, checkboxID);
+	}
+
+	public boolean isCheckboxSelectedByID(WebDriver driver, String checkboxID) {
+		waitForElementVisible(driver, BasePageUI.DYNAMIC_CHECKBOX_BY_ID, checkboxID);
+		return isElementSelected(driver, BasePageUI.DYNAMIC_CHECKBOX_BY_ID, checkboxID);
+	}
+
+	public void checkToCheckboxOrRadioByTitle(WebDriver driver, String checkboxOrRadioTitle) {
+		waitForElementClickable(driver, BasePageUI.DYNAMIC_CHECKBOX_OR_RADIO_BY_TITLE, checkboxOrRadioTitle);
+		checkToCheckboxOrRadio(driver, BasePageUI.DYNAMIC_CHECKBOX_OR_RADIO_BY_TITLE, checkboxOrRadioTitle);
+	}
+
+	public void uncheckToCheckboxTitle(WebDriver driver, String checkboxTitle) {
+		waitForElementClickable(driver, BasePageUI.DYNAMIC_CHECKBOX_OR_RADIO_BY_TITLE, checkboxTitle);
+		uncheckToCheckbox(driver, BasePageUI.DYNAMIC_CHECKBOX_OR_RADIO_BY_TITLE, checkboxTitle);
+	}
+
+	public void clickToCloseBarNotiSuccessMessageIcon(WebDriver driver) {
+		waitForElementClickable(driver, BasePageUI.CLOSE_BAR_NOTI_SUCCESS_MESSAGE_ICON);
+		clickToElement(driver, BasePageUI.CLOSE_BAR_NOTI_SUCCESS_MESSAGE_ICON);
+		sleepInSecond(3);
+	}
+
+	public void clickToCloseAlertSuccessMessageIcon(WebDriver driver) {
+		waitForElementClickable(driver, BasePageUI.CLOSE_ALERT_SUCCESS_MESSAGE_ICON);
+		clickToElement(driver, BasePageUI.CLOSE_ALERT_SUCCESS_MESSAGE_ICON);
+		sleepInSecond(3);
+	}
+
+	public String getFieldErrorMessageByID(WebDriver driver, String fieldID) {
+		waitForElementVisible(driver, BasePageUI.DYNAMIC_FIELD_ERROR_MESSAGE_BY_ID, fieldID);
+		return getElementText(driver, BasePageUI.DYNAMIC_FIELD_ERROR_MESSAGE_BY_ID, fieldID);
+	}
+
+	public String getPageErrorMessage(WebDriver driver) {
+		waitForElementVisible(driver, BasePageUI.PAGE_ERROR_MESSAGE);
+		return getElementText(driver, BasePageUI.PAGE_ERROR_MESSAGE);
+	}
+
+	public String getPageSuccessMessage(WebDriver driver) {
+		waitForElementVisible(driver, BasePageUI.PAGE_SUCCESS_MESSAGE);
+		return getElementText(driver, BasePageUI.PAGE_SUCCESS_MESSAGE);
+	}
+
+	public String getBarNotiSuccessMessage(WebDriver driver) {
+		waitForElementVisible(driver, BasePageUI.BAR_NOTI_SUCCESS_MESSAGE);
+		return getElementText(driver, BasePageUI.BAR_NOTI_SUCCESS_MESSAGE);
+	}
+
+	public boolean isAlertSuccessMessageDisplayed(WebDriver driver, String message) {
+		waitForElementVisible(driver, BasePageUI.ALERT_SUCCESS_MESSAGE, message);
+		return isElementDisplayedInDOM(driver, BasePageUI.ALERT_SUCCESS_MESSAGE, message);
+	}
+
+	public String getTextLogInLogOutInHeaderLink(WebDriver driver) {
+		waitForElementVisible(driver, BasePageUI.LOG_LINK);
+		return getElementText(driver, BasePageUI.LOG_LINK);
 	}
 
 	private long longTimeout = GlobalConstants.LONG_TIMEOUT;
