@@ -1,7 +1,6 @@
 package commons;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -86,19 +85,8 @@ public class BaseTest {
 		return 100000 + rand.nextInt(900000);
 	}
 
-	protected String getCurrentTime() {
-		Date date = new Date();
-		return date.toString();
-	}
-
 	protected String getReverseString(WebDriver driver, String str) {
 		StringBuilder sb = new StringBuilder(str);
-		sb.reverse();
-		return sb.toString();
-	}
-
-	protected String getReverseString(WebDriver driver, int num) {
-		StringBuilder sb = new StringBuilder(num);
 		sb.reverse();
 		return sb.toString();
 	}
