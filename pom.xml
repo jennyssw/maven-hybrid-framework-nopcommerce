@@ -178,7 +178,7 @@
 				<configuration>
 					<!-- Run TestNG xml file -->
 					<suiteXmlFiles>
-						<suiteXmlFile>src/test/resources/runOnChromeBrowser.xml</suiteXmlFile>
+						<suiteXmlFile>src/test/resources/runAllSuites.xml</suiteXmlFile>
 					</suiteXmlFiles>
 
 					<!-- Argument -->
