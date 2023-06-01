@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.Alert;
@@ -21,7 +22,6 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class BasePage {
-
 	public static BasePage getBasePageInstance() {
 		return new BasePage();
 	}
@@ -478,7 +478,9 @@ public class BasePage {
 	/** Common function for Web Component **/
 	public String getCurrentCalendar() {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		Calendar c = Calendar.getInstance();
+		Locale locale = Locale.US;
+		TimeZone timeZone = TimeZone.getTimeZone("UTC-7");
+		Calendar c = Calendar.getInstance(timeZone, locale);
 		c.setTime(new Date());
 		sdf.format(c.getTime());
 		int month = c.get(Calendar.MONTH) + 1;
