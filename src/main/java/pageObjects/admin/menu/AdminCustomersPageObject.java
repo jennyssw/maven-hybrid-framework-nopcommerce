@@ -16,12 +16,12 @@ public class AdminCustomersPageObject extends MenuNavigationPageObject {
 	}
 
 	public void selectTagInCustomerRolesTaglistInCustomersPage(WebDriver driver, String expectedItemText) {
-		selectItemInDropdown(driver, AdminCustomersPageUI.CUSTOMER_ROLES_TAG_LIST_IN_CUSTOMERS, AdminCustomersPageUI.NAME_TAG_ITEM, expectedItemText);
+		selectItemInDropdown(driver, AdminCustomersPageUI.CUSTOMER_ROLES_TAG_LIST_IN_CUSTOMERS, AdminCustomersPageUI.OPTION_ITEM, expectedItemText);
 	}
 
-	public boolean isCustomerInfoDisplayed(WebDriver driver, String emailRole, String fullName, String customerRoles, String company, String statusIcon) {
-		waitForElementVisible(driver, AdminCustomersPageUI.CUSTOMER_INFO_ROW_IN_TABLE_EDIT_ICON, emailRole, fullName, customerRoles, company, statusIcon);
-		return isElementDisplayedInDOM(driver, AdminCustomersPageUI.CUSTOMER_INFO_ROW_IN_TABLE_EDIT_ICON, emailRole, fullName, customerRoles, company, statusIcon);
+	public boolean isCustomerInfoDisplayed(WebDriver driver, String emailRole, String fullName, String customerRole, String company, String statusIcon) {
+		waitForElementVisible(driver, AdminCustomersPageUI.CUSTOMER_INFO_ROW_IN_TABLE_EDIT_ICON, emailRole, fullName, customerRole, company, statusIcon);
+		return isElementDisplayedInDOM(driver, AdminCustomersPageUI.CUSTOMER_INFO_ROW_IN_TABLE_EDIT_ICON, emailRole, fullName, customerRole, company, statusIcon);
 	}
 
 	public boolean isOneItemInTableDisplayed(WebDriver driver) {
@@ -31,9 +31,9 @@ public class AdminCustomersPageObject extends MenuNavigationPageObject {
 		return itemNum == 1;
 	}
 
-	public AdminEditCustomerDetailsPageObject clickToEditIconOfCustomerInfoRow(WebDriver driver, String emailRole, String fullName, String customerRoles, String company, String statusIcon) {
-		waitForElementClickable(driver, AdminCustomersPageUI.CUSTOMER_INFO_ROW_IN_TABLE_EDIT_ICON, emailRole, fullName, customerRoles, company, statusIcon);
-		clickToElement(driver, AdminCustomersPageUI.CUSTOMER_INFO_ROW_IN_TABLE_EDIT_ICON, emailRole, fullName, customerRoles, company, statusIcon);
+	public AdminEditCustomerDetailsPageObject clickToEditIconOfCustomerInfoRow(WebDriver driver, String emailRole, String fullName, String customerRole, String company, String statusIcon) {
+		waitForElementClickable(driver, AdminCustomersPageUI.CUSTOMER_INFO_ROW_IN_TABLE_EDIT_ICON, emailRole, fullName, customerRole, company, statusIcon);
+		clickToElement(driver, AdminCustomersPageUI.CUSTOMER_INFO_ROW_IN_TABLE_EDIT_ICON, emailRole, fullName, customerRole, company, statusIcon);
 		sleepInSecond(3);
 		return PageGeneratorManager.getAdminEditCustomerDetailsPage(driver);
 	}
@@ -51,9 +51,9 @@ public class AdminCustomersPageObject extends MenuNavigationPageObject {
 		return PageGeneratorManager.getAdminAddANewAddressPage(driver);
 	}
 
-	public void clickToDeleteIconInCustomerRolesTaglistByNameTag(WebDriver driver, String nameTag) {
-		waitForElementClickable(driver, AdminCustomersPageUI.DYNAMIC_DELETE_ICON_BY_NAME_TAG, nameTag);
-		clickToElement(driver, AdminCustomersPageUI.DYNAMIC_DELETE_ICON_BY_NAME_TAG, nameTag);
+	public void clickToDeleteIconInCustomerRolesTaglistByTitle(WebDriver driver, String nameTag) {
+		waitForElementClickable(driver, AdminCustomersPageUI.DELETE_ICON_BY_TITLE, nameTag);
+		clickToElement(driver, AdminCustomersPageUI.DELETE_ICON_BY_TITLE, nameTag);
 	}
 
 	public void clickToSearchCustomerButton(WebDriver driver) {
@@ -69,5 +69,9 @@ public class AdminCustomersPageObject extends MenuNavigationPageObject {
 		} else if (getElementAttributeValue(driver, AdminCustomersPageUI.COLLAPSE_ICON, "class").contains("down")) {
 			clickToElement(driver, AdminCustomersPageUI.COLLAPSE_ICON);
 		}
+	}
+
+	public void scrollToCustomerInfoByJS(WebDriver driver, String emailRole, String fullName, String customerRole, String company, String statusIcon) {
+		scrollToElementOnDownByJS(driver, AdminCustomersPageUI.CUSTOMER_INFO_ROW_IN_TABLE_EDIT_ICON, emailRole, fullName, customerRole, company, statusIcon);
 	}
 }
