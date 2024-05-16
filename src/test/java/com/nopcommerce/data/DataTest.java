@@ -95,9 +95,8 @@ public class DataTest extends BaseTest {
 		public static final String GENDER = "Female";
 
 		public static final String DAY_OF_BIRTH = "13";
-		public static final String MONTH_OF_BIRTH = "9";
+		public static final String MONTH_OF_BIRTH = "10";
 		public static final String YEAR_OF_BIRTH = "1997";
-		public static final String DATE_OF_BIRTH = MONTH_OF_BIRTH + "/" + DAY_OF_BIRTH + "/" + YEAR_OF_BIRTH;
 		public static final String COMPANY = "Automation VN " + getRandomNumber();
 		public static final String COUNTRY = "Viet Nam";
 		public static final String STATE = "Other";
@@ -109,10 +108,9 @@ public class DataTest extends BaseTest {
 		public static final String PHONE_NUM = "0123456789";
 		public static final String FAX_NUM = "+842839100751";
 
-		public static final String DAY_OF_BIRTH_2 = "2";
-		public static final String MONTH_OF_BIRTH_2 = "2";
+		public static final String DAY_OF_BIRTH_2 = "22";
+		public static final String MONTH_OF_BIRTH_2 = "12";
 		public static final String YEAR_OF_BIRTH_2 = "1998";
-		public static final String DATE_OF_BIRTH_2 = MONTH_OF_BIRTH_2 + "/" + DAY_OF_BIRTH_2 + "/" + YEAR_OF_BIRTH;
 		public static final String COMPANY_2 = "Automation US " + getRandomNumber();
 		public static final String COUNTRY_2 = "United States";
 		public static final String STATE_2 = "California";

@@ -11,9 +11,6 @@ public class GlobalConstants {
 	public static final long SHORT_TIMEOUT = 5;
 	public static final long LONG_TIMEOUT = 30;
 
-	public static final String UPLOAD_PATH = getFolderSeparator("uploadFiles");
-
-	public static String getFolderSeparator(String folderName) {
-		return PROJECT_PATH + FILE_SEPARATOR + folderName + FILE_SEPARATOR;
-	}
+	public static final String UPLOAD_PATH = PROJECT_PATH + FILE_SEPARATOR + "uploadFiles" + FILE_SEPARATOR;
+	public static final String ENVIRONMENT_CONFIG_PATH = PROJECT_PATH + FILE_SEPARATOR + "environmentConfig" + FILE_SEPARATOR + "%s.properties";
 }
