@@ -3,10 +3,12 @@
 	<parameter name="environment" value="live" />
 
 	<listeners>
+		<listener class-name="org.uncommons.reportng.HTMLReporter" />
+		<listener class-name="org.uncommons.reportng.JUnitXMLReporter" />
 		<listener class-name="commons.MethodListener" />
 		<listener class-name="reportConfig.ReportNGListener" />
-		<listener class-name="org.uncommons.reportng.HTMLReporter" />
 	</listeners>
+
 
 	<test name="Register Test">
 		<parameter name="browser" value="chrome" />

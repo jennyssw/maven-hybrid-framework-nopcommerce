@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suite parallel="false" name="Nopcommerce - Run on FIREFOX browser">
+<suite parallel="false" name="Nopcommerce - Run on chrome_headless browser">
 	<parameter name="environment" value="live" />
 
 	<listeners>
@@ -9,85 +9,86 @@
 		<listener class-name="reportConfig.ReportNGListener" />
 	</listeners>
 
+
 	<test name="Register Test">
-		<parameter name="browser" value="firefox" />
+		<parameter name="browser" value="chrome_headless" />
 		<classes>
 			<class name="com.nopcommerce.register.RegisterTest" />
 		</classes>
 	</test>
 
 	<test name="Login Test">
-		<parameter name="browser" value="firefox" />
+		<parameter name="browser" value="chrome_headless" />
 		<classes>
 			<class name="com.nopcommerce.login.LoginTest" />
 		</classes>
 	</test>
 
 	<test name="Account Test">
-		<parameter name="browser" value="firefox" />
+		<parameter name="browser" value="chrome_headless" />
 		<classes>
 			<class name="com.nopcommerce.account.AccountTest" />
 		</classes>
 	</test>
 
 	<test name="Search Test">
-		<parameter name="browser" value="firefox" />
+		<parameter name="browser" value="chrome_headless" />
 		<classes>
 			<class name="com.nopcommerce.search.SearchTest" />
 		</classes>
 	</test>
 
 	<test name="Advanced Search Test">
-		<parameter name="browser" value="firefox" />
+		<parameter name="browser" value="chrome_headless" />
 		<classes>
 			<class name="com.nopcommerce.search.AdvancedSearchTest" />
 		</classes>
 	</test>
 
 	<test name="Sort Test">
-		<parameter name="browser" value="firefox" />
+		<parameter name="browser" value="chrome_headless" />
 		<classes>
 			<class name="com.nopcommerce.sort.SortTest" />
 		</classes>
 	</test>
 
 	<test name="Display Test">
-		<parameter name="browser" value="firefox" />
+		<parameter name="browser" value="chrome_headless" />
 		<classes>
 			<class name="com.nopcommerce.sort.DisplayTest" />
 		</classes>
 	</test>
 
 	<test name="Wishlist Test">
-		<parameter name="browser" value="firefox" />
+		<parameter name="browser" value="chrome_headless" />
 		<classes>
 			<class name="com.nopcommerce.wishlist.WishlistTest" />
 		</classes>
 	</test>
 
 	<test name="Recently Viewed Product Test">
-		<parameter name="browser" value="firefox" />
+		<parameter name="browser" value="chrome_headless" />
 		<classes>
 			<class name="com.nopcommerce.wishlist.RecentlyViewedProductTest" />
 		</classes>
 	</test>
 
 	<test name="Order Test">
-		<parameter name="browser" value="firefox" />
+		<parameter name="browser" value="chrome_headless" />
 		<classes>
 			<class name="com.nopcommerce.order.OrderTest" />
 		</classes>
 	</test>
 
 	<test name="Search Product Test">
-		<parameter name="browser" value="firefox" />
+		<parameter name="browser" value="chrome_headless" />
 		<classes>
 			<class name="com.nopcommerce.admin.SearchProductTest" />
 		</classes>
 	</test>
 
 	<test name="Customer Test">
-		<parameter name="browser" value="firefox" />
+		<parameter name="browser" value="chrome_headless" />
 		<classes>
 			<class name="com.nopcommerce.admin.CustomerTest" />
 		</classes>
