@@ -1,30 +1,31 @@
 package commons;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.safari.SafariDriver;
 import org.testng.Assert;
 import org.testng.Reporter;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-
 public class BaseTest {
 	private WebDriver driver;
 	protected final Log log;
 	String projectPath = GlobalConstants.PROJECT_PATH;
 
-	public BaseTest() {
+	protected BaseTest() {
 		log = LogFactory.getLog(getClass());
 	}
 
@@ -32,39 +33,47 @@ public class BaseTest {
 		BrowserList browserList = BrowserList.valueOf(browserName.toUpperCase());
 		switch (browserList) {
 		case FIREFOX:
-			WebDriverManager.firefoxdriver().driverVersion("0.31.0").setup();
 			driver = new FirefoxDriver();
 			break;
 		case FIREFOX_HEADLESS:
 			FirefoxOptions ffHeadOptions = new FirefoxOptions();
 			ffHeadOptions.addArguments("-headless");
 			ffHeadOptions.addArguments("window-size=1920x1080");
-			driver = WebDriverManager.firefoxdriver().capabilities(ffHeadOptions).create();
+			driver = new FirefoxDriver(ffHeadOptions);
 			break;
 		case CHROME:
-			// driver = WebDriverManager.chromedriver().create();
 			ChromeOptions chromeOptions = new ChromeOptions();
-			Map<String, Object> prefs = new HashMap<String, Object>();
-			prefs.put("autofill.profile_enabled", false);
-			chromeOptions.setExperimentalOption("prefs", prefs);
-			driver = WebDriverManager.chromedriver().capabilities(chromeOptions).create();
+			Map<String, Object> chromePrefs = new HashMap<String, Object>();
+			chromePrefs.put("profile.default_content_setting_values.notifications", 2);
+			chromePrefs.put("credentials_enable_service", false);
+			chromePrefs.put("profile.password_manager_enabled", false);
+			chromePrefs.put("autofill.profile_enabled", false);
+			chromePrefs.put("autofill.credit_card_enabled", false);
+			chromeOptions.setExperimentalOption("prefs", chromePrefs);
+			chromeOptions.setExperimentalOption("useAutomationExtension", false);
+			chromeOptions.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
+			chromeOptions.addArguments("--disable-notifications");
+			driver = new ChromeDriver(chromeOptions);
 			break;
 		case CHROME_HEADLESS:
 			ChromeOptions chromeHeadOptions = new ChromeOptions();
-			chromeHeadOptions.addArguments("-headless");
+			chromeHeadOptions.addArguments("--headless");
 			chromeHeadOptions.addArguments("window-size=1920x1080");
-			driver = WebDriverManager.chromedriver().capabilities(chromeHeadOptions).create();
+			driver = new ChromeDriver(chromeHeadOptions);
 			break;
-		case COC_COC:
-			WebDriverManager.chromedriver().driverVersion(browserName).setup();
-			ChromeOptions cocCocOptions = new ChromeOptions();
-			cocCocOptions.setBinary("C:\\Users\\Admin\\AppData\\Local\\CocCoc\\Browser\\Application\\browser.exe");
-			driver = new ChromeDriver(cocCocOptions);
 		case EDGE:
-			driver = WebDriverManager.edgedriver().create();
-			break;
-		case OPERA:
-			driver = WebDriverManager.operadriver().create();
+			EdgeOptions edgeOptions = new EdgeOptions();
+			Map<String, Object> edgePrefs = new HashMap<String, Object>();
+			edgePrefs.put("profile.default_content_setting_values.notifications", 2);
+			edgePrefs.put("credentials_enable_service", false);
+			edgePrefs.put("profile.password_manager_enabled", false);
+			edgePrefs.put("autofill.profile_enabled", false);
+			edgePrefs.put("autofill.credit_card_enabled", false);
+			edgeOptions.setExperimentalOption("prefs", edgePrefs);
+			edgeOptions.setExperimentalOption("useAutomationExtension", false);
+			edgeOptions.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
+			edgeOptions.addArguments("--disable-notifications");
+			driver = new EdgeDriver(edgeOptions);
 			break;
 		case SAFARI:
 			driver = new SafariDriver();
@@ -73,7 +82,7 @@ public class BaseTest {
 			throw new RuntimeException("Browser name is not valid!");
 		}
 
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(GlobalConstants.LONG_TIMEOUT));
 		driver.manage().window().maximize();
 		driver.get(urlValue);
 
@@ -154,13 +163,11 @@ public class BaseTest {
 				browserDriverName = "geckodriver";
 			} else if (driverInstanceName.contains("edge")) {
 				browserDriverName = "msedgedriver";
-			} else if (driverInstanceName.contains("opera")) {
-				browserDriverName = "operadriver";
 			} else {
 				browserDriverName = "safaridriver";
 			}
 
-			if (osName.contains("Windows")) {
+			if (osName.contains("windows")) {
 				cmd = "taskkill /F /FI \"IMAGENAME eq " + browserDriverName + "*\"";
 			} else {
 				cmd = "pkill " + browserDriverName;
@@ -170,9 +177,7 @@ public class BaseTest {
 				driver.manage().deleteAllCookies();
 				driver.quit();
 			}
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
 			log.info(e.getMessage());
 		} finally {
 			try {
