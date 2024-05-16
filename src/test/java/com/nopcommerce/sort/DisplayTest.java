@@ -1,6 +1,5 @@
 package com.nopcommerce.sort;
 
-import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -8,23 +7,23 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import commons.BaseTest;
-import factoryEnvironment.Environment;
+import environmentConfig.PropertiesConfig;
 import pageObjects.user.PageGeneratorManager;
 import pageObjects.user.UserHomePageObject;
 import pageObjects.user.UserInventoryPageObject;
 
 public class DisplayTest extends BaseTest {
 	WebDriver driver;
-	Environment env;
+	PropertiesConfig propertiesConfig;
 	UserHomePageObject userHomePage;
 	UserInventoryPageObject userInventoryPage;
 
 	@Parameters({ "browser", "environment" })
 	@BeforeClass
 	public void beforeClass(String browserName, String environment) {
-		ConfigFactory.setProperty("env", environment.toLowerCase());
-		env = ConfigFactory.create(Environment.class);
-		driver = getBrowserDriver(browserName, env.getUserUrl());
+		propertiesConfig = PropertiesConfig.getProperties(environment);
+		driver = getBrowserDriver(browserName, propertiesConfig.getUserUrl());
+
 		userHomePage = PageGeneratorManager.getUserHomePage(driver);
 		userHomePage.hoverToMenuAndClickToSubmenuByTitle(driver, "Computers", "Notebooks");
 

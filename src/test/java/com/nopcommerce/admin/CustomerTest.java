@@ -1,6 +1,5 @@
 package com.nopcommerce.admin;
 
-import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -10,7 +9,7 @@ import org.testng.annotations.Test;
 import com.nopcommerce.data.DataTest;
 
 import commons.BaseTest;
-import factoryEnvironment.Environment;
+import environmentConfig.PropertiesConfig;
 import pageObjects.admin.AdminAddANewAddressPageObject;
 import pageObjects.admin.AdminAddANewCustomerPageObject;
 import pageObjects.admin.AdminEditAddressPageObject;
@@ -23,7 +22,7 @@ import pageObjects.admin.menu.AdminProductsPageObject;
 
 public class CustomerTest extends BaseTest {
 	WebDriver driver;
-	Environment env;
+	PropertiesConfig propertiesConfig;
 	AdminLoginPageObject adminLoginPage;
 	AdminDashboardPageObject adminDashboardPage;
 	AdminProductsPageObject adminProductsPage;
@@ -32,6 +31,7 @@ public class CustomerTest extends BaseTest {
 	AdminEditCustomerDetailsPageObject adminEditCustomerDetailsPage;
 	AdminAddANewAddressPageObject adminAddANewAddressPage;
 	AdminEditAddressPageObject adminEditAddressPage;
+	String driverInstanceName;
 	String fullAddress;
 	String productName = DataTest.AdminSearchProduct.PRODUCT_NAME;
 	String sku = DataTest.AdminSearchProduct.SKU;
@@ -47,12 +47,14 @@ public class CustomerTest extends BaseTest {
 	String lastName2 = "Edit " + lastName;
 	String fullName = firstName + " " + lastName;
 	String fullName2 = firstName2 + " " + lastName2;
-	String dateOfBirth = DataTest.AdminCustomer.DATE_OF_BIRTH;
-	String dateOfBirth2 = DataTest.AdminCustomer.DATE_OF_BIRTH_2;
 	String monthOfBirth = DataTest.AdminCustomer.MONTH_OF_BIRTH;
 	String monthOfBirth2 = DataTest.AdminCustomer.MONTH_OF_BIRTH_2;
 	String dayOfBirth = DataTest.AdminCustomer.DAY_OF_BIRTH;
 	String dayOfBirth2 = DataTest.AdminCustomer.DAY_OF_BIRTH_2;
+	String yearOfBirth = DataTest.AdminCustomer.YEAR_OF_BIRTH;
+	String yearOfBirth2 = DataTest.AdminCustomer.YEAR_OF_BIRTH_2;
+	String dateOfBirth = monthOfBirth + "/" + dayOfBirth + "/" + yearOfBirth;
+	String dateOfBirth2 = monthOfBirth2 + "/" + dayOfBirth2 + "/" + yearOfBirth2;
 	String company = DataTest.AdminCustomer.COMPANY;
 	String company2 = DataTest.AdminCustomer.COMPANY_2;
 	String country = DataTest.AdminCustomer.COUNTRY;
@@ -77,9 +79,9 @@ public class CustomerTest extends BaseTest {
 	@Parameters({ "browser", "environment" })
 	@BeforeClass
 	public void beforeClass(String browserName, String environment) {
-		ConfigFactory.setProperty("env", environment.toLowerCase());
-		env = ConfigFactory.create(Environment.class);
-		driver = getBrowserDriver(browserName, env.getAdminUrl());
+		propertiesConfig = PropertiesConfig.getProperties(environment);
+		driver = getBrowserDriver(browserName, propertiesConfig.getAdminUrl());
+		driverInstanceName = driver.toString().toLowerCase();
 
 		adminLoginPage = PageGeneratorManager.getAdminLoginPage(driver);
 		adminLoginPage.enterToTextboxByID(driver, DataTest.AdminLogin.ADMIN_EMAIL, "Email");
@@ -113,16 +115,16 @@ public class CustomerTest extends BaseTest {
 		adminAddANewCustomerPage.clickToGenderRadio(driver, gender);
 
 		log.info("Customers_01 - Step 08: Enter to Date picker: " + dateOfBirth);
-		adminAddANewCustomerPage.enterToTextboxByID(driver, dateOfBirth, "DateOfBirth");
+		adminAddANewCustomerPage.enterToDatePickerByID(driver, dateOfBirth);
 
 		log.info("Customers_01 - Step 09: Enter to Company textbox: " + company);
 		adminAddANewCustomerPage.enterToTextboxByID(driver, company, "Company");
 
-		log.info("Customers_01 - Step 10: Click to Delete icon in Customer Roles taglist by name tag: Registered");
-		adminAddANewCustomerPage.clickToDeleteIconInCustomerRolesTaglistByNameTag(driver, "Registered");
-
-		log.info("Customers_01 - Step 11: Select tag in Customer Roles taglist: Guests");
+		log.info("Customers_01 - Step 10: Select tag in Customer Roles taglist: Guests");
 		adminAddANewCustomerPage.selectTagInCustomerRolesTaglistInAddNewCusPage(driver, "Guests");
+
+		log.info("Customers_01 - Step 11: Click to Delete icon in Customer Roles taglist by name tag: Registered");
+		adminAddANewCustomerPage.clickToDeleteIconInCustomerRolesTaglistByTitle(driver, "Registered");
 
 		log.info("Customers_01 - Step 12: Check to Active checkbox");
 		adminAddANewCustomerPage.clickToCheckboxByID(driver, "Active");
@@ -149,8 +151,9 @@ public class CustomerTest extends BaseTest {
 		log.info("Customers_01 - Step 19: Verify selected radio is displayed: " + gender);
 		verifyTrue(adminEditCustomerDetailsPage.isSelectedRadioDisplayed(driver, gender));
 
-		log.info("Customers_01 - Step 20: Verify Date Of Birth value is displayed: " + dateOfBirth);
-		verifyEquals(adminEditCustomerDetailsPage.getTextValueInTextboxByID(driver, "DateOfBirth"), dateOfBirth);
+		String dateOfBirthOutput = monthOfBirth + "/" + dayOfBirth + "/" + yearOfBirth;
+		log.info("Customers_01 - Step 20: Verify Date Of Birth value is displayed: " + dateOfBirthOutput);
+		verifyTrue(adminEditCustomerDetailsPage.isDateOfBirthEntered(driver, dateOfBirthOutput));
 
 		log.info("Customers_01 - Step 21: Verify Company value is displayed: " + company);
 		verifyEquals(adminEditCustomerDetailsPage.getTextValueInTextboxByID(driver, "Company"), company);
@@ -169,29 +172,31 @@ public class CustomerTest extends BaseTest {
 		adminCustomersPage = PageGeneratorManager.getAdminCustomersPage(driver);
 
 		log.info("Customers_01 - Step 26: Select tag in Customer Roles taglist: Guests");
+		adminCustomersPage.openSearchCustomerCard(driver);
 		adminCustomersPage.selectTagInCustomerRolesTaglistInCustomersPage(driver, "Guests");
 
 		log.info("Customers_01 - Step 27: Click to Delete icon in Customer Roles taglist by name tag: Registered");
-		adminCustomersPage.clickToDeleteIconInCustomerRolesTaglistByNameTag(driver, "Registered");
+		adminCustomersPage.clickToDeleteIconInCustomerRolesTaglistByTitle(driver, "Registered");
 
 		log.info("Customers_01 - Step 28: Click to Search button");
-		adminCustomersPage.openSearchCustomerCard(driver);
 		adminCustomersPage.clickToSearchCustomerButton(driver);
 
 		log.info("Customers_01 - Step 29: Verify Customer Info is displayed");
+		adminCustomersPage.scrollToCustomerInfoByJS(driver, "Guest", fullName, "Guests", company, "true");
 		verifyTrue(adminCustomersPage.isCustomerInfoDisplayed(driver, "Guest", fullName, "Guests", company, "true"));
 	}
 
 	@Test
 	public void TC_02_Search_Customer_With_Email() {
 		log.info("Customers_02 - Step 01: Enter to Email textbox with: " + email);
+		adminCustomersPage.openSearchCustomerCard(driver);
 		adminCustomersPage.enterToTextboxByID(driver, email, "SearchEmail");
 
 		log.info("Customers_02 - Step 02: Click to Search button");
-		adminCustomersPage.openSearchCustomerCard(driver);
 		adminCustomersPage.clickToSearchCustomerButton(driver);
 
 		log.info("Customers_02 - Step 03: Verify only one item is displayed");
+		adminCustomersPage.scrollToCustomerInfoByJS(driver, "Guest", fullName, "Guests", company, "true");
 		verifyTrue(adminCustomersPage.isCustomerInfoDisplayed(driver, "Guest", fullName, "Guests", company, "true"));
 		verifyTrue(adminCustomersPage.isOneItemInTableDisplayed(driver));
 	}
@@ -199,6 +204,7 @@ public class CustomerTest extends BaseTest {
 	@Test
 	public void TC_03_Search_Customer_With_First_Name_Last_Name() {
 		log.info("Customers_03 - Step 01: Enter to Email textbox with 'null'");
+		adminCustomersPage.openSearchCustomerCard(driver);
 		adminCustomersPage.enterToTextboxByID(driver, "", "SearchEmail");
 
 		log.info("Customers_03 - Step 02: Enter to First Name textbox with: " + firstName);
@@ -208,10 +214,10 @@ public class CustomerTest extends BaseTest {
 		adminCustomersPage.enterToTextboxByID(driver, lastName, "SearchLastName");
 
 		log.info("Customers_03 - Step 04: Click to Search button");
-		adminCustomersPage.openSearchCustomerCard(driver);
 		adminCustomersPage.clickToSearchCustomerButton(driver);
 
 		log.info("Customers_03 - Step 05: Verify only one item is displayed");
+		adminCustomersPage.scrollToCustomerInfoByJS(driver, "Guest", fullName, "Guests", company, "true");
 		verifyTrue(adminCustomersPage.isCustomerInfoDisplayed(driver, "Guest", fullName, "Guests", company, "true"));
 		verifyTrue(adminCustomersPage.isOneItemInTableDisplayed(driver));
 	}
@@ -219,6 +225,7 @@ public class CustomerTest extends BaseTest {
 	@Test
 	public void TC_04_Search_Customer_With_Company() {
 		log.info("Customers_04 - Step 01: Enter to First Name textbox with 'null'");
+		adminCustomersPage.openSearchCustomerCard(driver);
 		adminCustomersPage.enterToTextboxByID(driver, "", "SearchFirstName");
 
 		log.info("Customers_04 - Step 02: Enter to Last Name textbox with 'null'");
@@ -228,10 +235,10 @@ public class CustomerTest extends BaseTest {
 		adminCustomersPage.enterToTextboxByID(driver, company, "SearchCompany");
 
 		log.info("Customers_04 - Step 04: Click to Search button");
-		adminCustomersPage.openSearchCustomerCard(driver);
 		adminCustomersPage.clickToSearchCustomerButton(driver);
 
 		log.info("Customers_04 - Step 05: Verify only one item is displayed");
+		adminCustomersPage.scrollToCustomerInfoByJS(driver, "Guest", fullName, "Guests", company, "true");
 		verifyTrue(adminCustomersPage.isCustomerInfoDisplayed(driver, "Guest", fullName, "Guests", company, "true"));
 		verifyTrue(adminCustomersPage.isOneItemInTableDisplayed(driver));
 	}
@@ -239,6 +246,7 @@ public class CustomerTest extends BaseTest {
 	@Test
 	public void TC_05_Search_Customer_With_Full_Data() {
 		log.info("Customers_05 - Step 01: Enter to Email textbox with: " + email);
+		adminCustomersPage.openSearchCustomerCard(driver);
 		adminCustomersPage.enterToTextboxByID(driver, email, "SearchEmail");
 
 		log.info("Customers_05 - Step 02: Enter to First Name textbox with: " + firstName);
@@ -257,10 +265,10 @@ public class CustomerTest extends BaseTest {
 		adminCustomersPage.enterToTextboxByID(driver, company, "SearchCompany");
 
 		log.info("Customers_05 - Step 07: Click to Search button");
-		adminCustomersPage.openSearchCustomerCard(driver);
 		adminCustomersPage.clickToSearchCustomerButton(driver);
 
 		log.info("Customers_05 - Step 08: Verify only one item is displayed");
+		adminCustomersPage.scrollToCustomerInfoByJS(driver, "Guest", fullName, "Guests", company, "true");
 		verifyTrue(adminCustomersPage.isCustomerInfoDisplayed(driver, "Guest", fullName, "Guests", company, "true"));
 		verifyTrue(adminCustomersPage.isOneItemInTableDisplayed(driver));
 	}
@@ -280,7 +288,7 @@ public class CustomerTest extends BaseTest {
 		adminEditCustomerDetailsPage.enterToTextboxByID(driver, lastName2, "LastName");
 
 		log.info("Customers_06 - Step 05: Enter to Date Of Birth textbox with: " + dateOfBirth2);
-		adminEditCustomerDetailsPage.enterToTextboxByID(driver, dateOfBirth2, "DateOfBirth");
+		adminEditCustomerDetailsPage.enterToDatePickerByID(driver, dateOfBirth2);
 
 		log.info("Customers_06 - Step 06: Enter to Company textbox with: " + company2);
 		adminEditCustomerDetailsPage.enterToTextboxByID(driver, company2, "Company");
@@ -317,13 +325,14 @@ public class CustomerTest extends BaseTest {
 		adminCustomersPage.selectTagInCustomerRolesTaglistInCustomersPage(driver, "Guests");
 
 		log.info("Customers_06 - Step 17: Click to Delete icon in Customer Roles taglist by name tag: Registered");
-		adminCustomersPage.clickToDeleteIconInCustomerRolesTaglistByNameTag(driver, "Registered");
+		adminCustomersPage.clickToDeleteIconInCustomerRolesTaglistByTitle(driver, "Registered");
 
 		log.info("Customers_06 - Step 18: Click to Search button");
 		adminCustomersPage.openSearchCustomerCard(driver);
 		adminCustomersPage.clickToSearchCustomerButton(driver);
 
 		log.info("Customers_06 - Step 19: Verify only one item is displayed");
+		adminCustomersPage.scrollToCustomerInfoByJS(driver, "Guest", fullName2, "Guests", company2, "true");
 		verifyTrue(adminCustomersPage.isCustomerInfoDisplayed(driver, "Guest", fullName2, "Guests", company2, "true"));
 		verifyTrue(adminCustomersPage.isOneItemInTableDisplayed(driver));
 	}
@@ -390,12 +399,10 @@ public class CustomerTest extends BaseTest {
 		adminEditCustomerDetailsPage.openAddressesCardHeader(driver);
 
 		log.info("Customers_07 - Step 20: Verify Address Info is displayed");
-		verifyTrue(adminEditCustomerDetailsPage.isAddressInfoDisplayed(driver, firstName, lastName, email, phoneNum, faxNum, company));
-		String fullAddress = adminEditCustomerDetailsPage.getTextAddressColumnOfAddressInfoRow(driver, firstName, lastName, email, phoneNum, faxNum, company);
-		verifyTrue(fullAddress.equals(company + "\n" + address1 + "\n" + address2 + "\n" + city + "," + zipCode + "\n" + country));
+		verifyTrue(adminEditCustomerDetailsPage.isAddressInfoDisplayed(driver, firstName, lastName, email, phoneNum, faxNum, address1, address2));
 
 		log.info("Customers_07 - Step 21: Click to Edit icon of Address Info row");
-		adminEditAddressPage = adminEditCustomerDetailsPage.clickToEditIconOfAddressInfoRow(driver, firstName, lastName, email, phoneNum, faxNum, company);
+		adminEditAddressPage = adminEditCustomerDetailsPage.clickToEditIconOfAddressInfoRow(driver, firstName, lastName, email, phoneNum, faxNum, address1, address2);
 
 		log.info("Customers_07 - Step 22: Verify First Name value is displayed: " + firstName);
 		verifyEquals(adminEditAddressPage.getTextValueInTextboxByID(driver, "Address_FirstName"), firstName);
@@ -469,13 +476,14 @@ public class CustomerTest extends BaseTest {
 		adminCustomersPage.selectTagInCustomerRolesTaglistInCustomersPage(driver, "Guests");
 
 		log.info("Customers_08 - Step 10: Click to Delete icon in Customer Roles taglist by name tag: Registered");
-		adminCustomersPage.clickToDeleteIconInCustomerRolesTaglistByNameTag(driver, "Registered");
+		adminCustomersPage.clickToDeleteIconInCustomerRolesTaglistByTitle(driver, "Registered");
 
 		log.info("Customers_08 - Step 11: Click to Search button");
 		adminCustomersPage.openSearchCustomerCard(driver);
 		adminCustomersPage.clickToSearchCustomerButton(driver);
 
 		log.info("Customers_08 - Step 12: Verify only one item is displayed");
+		adminCustomersPage.scrollToCustomerInfoByJS(driver, "Guest", fullName2, "Guests", company2, "true");
 		verifyTrue(adminCustomersPage.isCustomerInfoDisplayed(driver, "Guest", fullName2, "Guests", company2, "true"));
 		verifyTrue(adminCustomersPage.isOneItemInTableDisplayed(driver));
 
@@ -486,7 +494,7 @@ public class CustomerTest extends BaseTest {
 		adminEditCustomerDetailsPage.openAddressesCardHeader(driver);
 
 		log.info("Customers_08 - Step 15: Click to Edit icon of Address Info row");
-		adminEditAddressPage = adminEditCustomerDetailsPage.clickToEditIconOfAddressInfoRow(driver, firstName, lastName, email, phoneNum, faxNum, city);
+		adminEditAddressPage = adminEditCustomerDetailsPage.clickToEditIconOfAddressInfoRow(driver, firstName, lastName, email, phoneNum, faxNum, address1, address2);
 
 		log.info("Customers_08 - Step 16: Enter to First Name textbox with: " + firstName2);
 		adminEditAddressPage.enterToTextboxByID(driver, firstName2, "Address_FirstName");
@@ -580,15 +588,13 @@ public class CustomerTest extends BaseTest {
 		adminEditCustomerDetailsPage.openAddressesCardHeader(driver);
 
 		log.info("Customers_08 - Step 46: Verify Address Info is displayed");
-		verifyTrue(adminEditCustomerDetailsPage.isAddressInfoDisplayed(driver, firstName2, lastName2, email2, phoneNum2, faxNum2, company2));
-		String fullAddress = adminEditCustomerDetailsPage.getTextAddressColumnOfAddressInfoRow(driver, firstName2, lastName2, email2, phoneNum2, faxNum2, company2);
-		verifyTrue(fullAddress.equals(company2 + "\n" + address1_2 + "\n" + address2_2 + "\n" + city2 + "," + state2 + "," + zipCode2 + "\n" + country2));
+		verifyTrue(adminEditCustomerDetailsPage.isAddressInfoDisplayed(driver, firstName2, lastName2, email2, phoneNum2, faxNum2, address1_2, address2_2));
 	}
 
 	@Test
 	public void TC_09_Delete_Address_In_Customer_Detail() {
 		log.info("Customers_09 - Step 01: Click to Delete icon of Address Info row");
-		adminEditCustomerDetailsPage.clickToDeleteIconOfCustomerInfoRow(driver, firstName2, lastName2, email2, phoneNum2, faxNum2, company2);
+		adminEditCustomerDetailsPage.clickToDeleteIconOfCustomerInfoRow(driver, firstName2, lastName2, email2, phoneNum2, faxNum2, address1_2, address2_2);
 
 		log.info("Customers_09 - Step 02: Click accept to Confirm Alert");
 		adminEditCustomerDetailsPage.clickAcceptToConfirmAlert(driver);

@@ -1,6 +1,5 @@
 package com.nopcommerce.account;
 
-import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -10,7 +9,7 @@ import org.testng.annotations.Test;
 import com.nopcommerce.data.DataTest;
 
 import commons.BaseTest;
-import factoryEnvironment.Environment;
+import environmentConfig.PropertiesConfig;
 import pageObjects.user.PageGeneratorManager;
 import pageObjects.user.UserCustumerAddressAddPageObject;
 import pageObjects.user.UserHomePageObject;
@@ -25,7 +24,7 @@ import pageObjects.user.sidebar.UserCustomerProductReviewPageObject;
 
 public class AccountTest extends BaseTest {
 	WebDriver driver;
-	Environment env;
+	PropertiesConfig propertiesConfig;
 	UserHomePageObject userHomePage;
 	UserLoginPageObject userLoginPage;
 	UserRegisterPageObject userRegisterPage;
@@ -58,11 +57,10 @@ public class AccountTest extends BaseTest {
 	@Parameters({ "browser", "environment" })
 	@BeforeClass
 	public void beforeClass(String browserName, String environment) {
-		ConfigFactory.setProperty("env", environment.toLowerCase());
-		env = ConfigFactory.create(Environment.class);
-		driver = getBrowserDriver(browserName, env.getUserUrl());
-		userHomePage = PageGeneratorManager.getUserHomePage(driver);
+		propertiesConfig = PropertiesConfig.getProperties(environment);
+		driver = getBrowserDriver(browserName, propertiesConfig.getUserUrl());
 
+		userHomePage = PageGeneratorManager.getUserHomePage(driver);
 		userHomePage.openLinkInHeaderByTitle(driver, "Register");
 		userRegisterPage = PageGeneratorManager.getUserRegisterPage(driver);
 
@@ -225,14 +223,17 @@ public class AccountTest extends BaseTest {
 		log.info("Account_03 - Step 13: Verify error message is displayed: 'Login was unsuccessful. Please correct the errors and try again. The credentials provided are incorrect'");
 		verifyTrue(userLoginPage.isErrorMessageDisplayedInValidationSummaryErrors(driver, "Login was unsuccessful. Please correct the errors and try again. The credentials provided are incorrect"));
 
-		log.info("Account_03 - Step 14: Enter to Correct Password with value: " + newPassword);
+		log.info("Account_03 - Step 14: Enter to Email with value: " + accountEmail);
+		userLoginPage.enterToTextboxByID(driver, accountEmail, "Email");
+
+		log.info("Account_03 - Step 15: Enter to Correct Password with value: " + newPassword);
 		userLoginPage.enterToTextboxByID(driver, newPassword, "Password");
 
-		log.info("Account_03 - Step 15: Click to Login button");
+		log.info("Account_03 - Step 16: Click to Login button");
 		userLoginPage.clickToButtonByTitleText(driver, "Log in");
 		userHomePage = PageGeneratorManager.getUserHomePage(driver);
 
-		log.info("Account_03 - Step 16: Verify redirect 'Login Page to Home Page' after successfuly login");
+		log.info("Account_03 - Step 17: Verify redirect 'Login Page to Home Page' after successfuly login");
 		verifyTrue(userHomePage.isTopicTitleUserHomePageDisplayed(driver));
 	}
 
@@ -255,13 +256,16 @@ public class AccountTest extends BaseTest {
 		log.info("Account_04 - Step 05: Click to Submit Review button");
 		userProductReviewPage.clickToButtonByTitleText(driver, "Submit review");
 
-		log.info("Account_04 - Step 06: Click to My Account link in header");
+		log.info("Account_04 - Step 06: Close success message in bar notification");
+		userCustomerChangePasswordPage.clickToCloseBarNotiSuccessMessageIcon(driver);
+
+		log.info("Account_04 - Step 07: Click to My Account link in header");
 		userCustomerInfoPage = userProductReviewPage.clickToMyAccountLinkInHeader(driver, "My account");
 
-		log.info("Account_04 - Step 07: Click to My Product Reviews link in sidebar");
+		log.info("Account_04 - Step 08: Click to My Product Reviews link in sidebar");
 		userCustomerProductReviewPage = userCustomerInfoPage.clickToProductReviewLinkInSidebar(driver);
 
-		log.info("Account_04 - Step 08: Verify my product reviews is displayed");
+		log.info("Account_04 - Step 09: Verify my product reviews is displayed");
 		verifyTrue(userCustomerProductReviewPage.isProductReviewTitleDisplayed(driver, "Performance Review"));
 		verifyTrue(userCustomerProductReviewPage.isProductReviewTextDisplayed(driver, "It’s pricey, but it brings a pleasant performance boost to an already fantastic machine."));
 	}

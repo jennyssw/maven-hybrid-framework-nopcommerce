@@ -1,6 +1,5 @@
 package com.nopcommerce.login;
 
-import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -10,7 +9,7 @@ import org.testng.annotations.Test;
 import com.nopcommerce.data.DataTest;
 
 import commons.BaseTest;
-import factoryEnvironment.Environment;
+import environmentConfig.PropertiesConfig;
 import pageObjects.user.PageGeneratorManager;
 import pageObjects.user.UserHomePageObject;
 import pageObjects.user.header.UserLoginPageObject;
@@ -18,7 +17,7 @@ import pageObjects.user.header.UserRegisterPageObject;
 
 public class LoginTest extends BaseTest {
 	WebDriver driver;
-	Environment env;
+	PropertiesConfig propertiesConfig;
 	UserHomePageObject userHomePage;
 	UserLoginPageObject userLoginPage;
 	UserRegisterPageObject userRegisterPage;
@@ -31,9 +30,8 @@ public class LoginTest extends BaseTest {
 	@Parameters({ "browser", "environment" })
 	@BeforeClass
 	public void beforeClass(String browserName, String environment) {
-		ConfigFactory.setProperty("env", environment.toLowerCase());
-		env = ConfigFactory.create(Environment.class);
-		driver = getBrowserDriver(browserName, env.getUserUrl());
+		propertiesConfig = PropertiesConfig.getProperties(environment);
+		driver = getBrowserDriver(browserName, propertiesConfig.getUserUrl());
 
 		userHomePage = PageGeneratorManager.getUserHomePage(driver);
 		userHomePage.openLinkInHeaderByTitle(driver, "Log in");
@@ -52,7 +50,7 @@ public class LoginTest extends BaseTest {
 		userLoginPage.clickToButtonByTitleText(driver, "Log in");
 
 		log.info("Login_01 - Step 04: Verify error message is displayed: 'Please enter your email'");
-		verifyEquals(userLoginPage.getFieldErrorMessageByID(driver, "Email-error"), "Please enter your email");
+		verifyEquals(userLoginPage.getFieldErrorMessageByClass(driver, "field-validation-error"), "Please enter your email");
 	}
 
 	@Test
@@ -70,16 +68,16 @@ public class LoginTest extends BaseTest {
 		}
 
 		log.info("Login_02 - Step 02: Login with invalid Email: " + invalidEmail);
-		userLoginPage.enterToTextboxByID(driver, invalidEmail, "Email");
+		userLoginPage.enterToTextboxByClassName(driver, invalidEmail, "email");
 
 		log.info("Login_02 - Step 03: Login with Password: " + password);
-		userLoginPage.enterToTextboxByID(driver, password, "Password");
+		userLoginPage.enterToTextboxByClassName(driver, password, "password");
 
 		log.info("Login_02 - Step 04: Click to Login button");
 		userLoginPage.clickToButtonByTitleText(driver, "Log in");
 
-		log.info("Login_02 - Step 05: Verify error message is displayed: 'Wrong email'");
-		verifyEquals(userLoginPage.getFieldErrorMessageByID(driver, "Email-error"), "Wrong email");
+		log.info("Login_02 - Step 05: Verify error message is displayed: 'Please enter a valid email address.'");
+		verifyEquals(userLoginPage.getFieldErrorMessageByID(driver, "Email-error"), "Please enter a valid email address.");
 	}
 
 	@Test
@@ -97,10 +95,10 @@ public class LoginTest extends BaseTest {
 		}
 
 		log.info("Login_03 - Step 02: Login with unregistered Email: " + email);
-		userLoginPage.enterToTextboxByID(driver, email, "Email");
+		userLoginPage.enterToTextboxByClassName(driver, email, "email");
 
 		log.info("Login_03 - Step 03: Login with Password: " + password);
-		userLoginPage.enterToTextboxByID(driver, password, "Password");
+		userLoginPage.enterToTextboxByClassName(driver, password, "password");
 
 		log.info("Login_03 - Step 04: Click to Login button");
 		userLoginPage.clickToButtonByTitleText(driver, "Log in");
@@ -148,10 +146,10 @@ public class LoginTest extends BaseTest {
 		}
 
 		log.info("Login_04 - Step 10: Login with registered Email: " + email);
-		userLoginPage.enterToTextboxByID(driver, email, "Email");
+		userLoginPage.enterToTextboxByClassName(driver, email, "email");
 
 		log.info("Login_04 - Step 11: Login with empty Password");
-		userLoginPage.enterToTextboxByID(driver, "", "Password");
+		userLoginPage.enterToTextboxByClassName(driver, "", "password");
 
 		log.info("Login_04 - Step 12: Click to Login button");
 		userLoginPage.clickToButtonByTitleText(driver, "Log in");
@@ -175,11 +173,11 @@ public class LoginTest extends BaseTest {
 		}
 
 		log.info("Login_05 - Step 02: Login with registered Email: " + email);
-		userLoginPage.enterToTextboxByID(driver, email, "Email");
+		userLoginPage.enterToTextboxByClassName(driver, email, "email");
 
 		String incorrectPassword = getReverseString(driver, password);
 		log.info("Login_05 - Step 03: Login with incorrect Password: " + incorrectPassword);
-		userLoginPage.enterToTextboxByID(driver, incorrectPassword, "Password");
+		userLoginPage.enterToTextboxByClassName(driver, incorrectPassword, "password");
 
 		log.info("Login_05 - Step 04: Click to Login button");
 		userLoginPage.clickToButtonByTitleText(driver, "Log in");
@@ -203,10 +201,10 @@ public class LoginTest extends BaseTest {
 		}
 
 		log.info("Login_06 - Step 02: Login with registered Email: " + email);
-		userLoginPage.enterToTextboxByID(driver, email, "Email");
+		userLoginPage.enterToTextboxByClassName(driver, email, "email");
 
 		log.info("Login_06 - Step 03: Login with correct Password: " + password);
-		userLoginPage.enterToTextboxByID(driver, password, "Password");
+		userLoginPage.enterToTextboxByClassName(driver, password, "password");
 
 		log.info("Login_06 - Step 04: Click to Login button");
 		userLoginPage.clickToButtonByTitleText(driver, "Log in");

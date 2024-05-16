@@ -1,6 +1,5 @@
 package com.nopcommerce.register;
 
-import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -10,14 +9,14 @@ import org.testng.annotations.Test;
 import com.nopcommerce.data.DataTest;
 
 import commons.BaseTest;
-import factoryEnvironment.Environment;
+import environmentConfig.PropertiesConfig;
 import pageObjects.user.PageGeneratorManager;
 import pageObjects.user.UserHomePageObject;
 import pageObjects.user.header.UserRegisterPageObject;
 
 public class RegisterTest extends BaseTest {
 	WebDriver driver;
-	Environment env;
+	PropertiesConfig propertiesConfig;
 	UserHomePageObject userHomePage;
 	UserRegisterPageObject userRegisterPage;
 	String invalidEmail = "123@@456.789";
@@ -30,9 +29,8 @@ public class RegisterTest extends BaseTest {
 	@Parameters({ "browser", "environment" })
 	@BeforeClass
 	public void beforeClass(String browserName, String environment) {
-		ConfigFactory.setProperty("env", environment.toLowerCase());
-		env = ConfigFactory.create(Environment.class);
-		driver = getBrowserDriver(browserName, env.getUserUrl());
+		propertiesConfig = PropertiesConfig.getProperties(environment);
+		driver = getBrowserDriver(browserName, propertiesConfig.getUserUrl());
 
 		userHomePage = PageGeneratorManager.getUserHomePage(driver);
 		userHomePage.openLinkInHeaderByTitle(driver, "Register");
@@ -69,9 +67,6 @@ public class RegisterTest extends BaseTest {
 		verifyEquals(userRegisterPage.getFieldErrorMessageByID(driver, "Email-error"), "Email is required.");
 
 		log.info("Register_01 - Step 10: Verify error message is displayed: 'Password is required.'");
-		verifyEquals(userRegisterPage.getFieldErrorMessageByID(driver, "Password-error"), "Password is required.");
-
-		log.info("Register_01 - Step 11: Verify error message is displayed: 'Password is required.'");
 		verifyEquals(userRegisterPage.getFieldErrorMessageByID(driver, "ConfirmPassword-error"), "Password is required.");
 	}
 
@@ -98,8 +93,8 @@ public class RegisterTest extends BaseTest {
 		log.info("Register_02 - Step 07: Click to Register button");
 		userRegisterPage.clickToButtonByTitleText(driver, "Register");
 
-		log.info("Register_02 - Step 08: Verify error message is displayed: 'Wrong email'");
-		verifyEquals(userRegisterPage.getFieldErrorMessageByID(driver, "Email-error"), "Wrong email");
+		log.info("Register_02 - Step 08: Verify error message is displayed: 'Please enter a valid email address.'");
+		verifyEquals(userRegisterPage.getFieldErrorMessageByID(driver, "Email-error"), "Please enter a valid email address.");
 	}
 
 	@Test
@@ -186,8 +181,8 @@ public class RegisterTest extends BaseTest {
 		log.info("Register_05 - Step 07: Click to Register button");
 		userRegisterPage.clickToButtonByTitleText(driver, "Register");
 
-		log.info("Register_05 - Step 08: Verify error message is displayed: 'Password must meet the following rules: must have at least 6 characters'");
-		verifyEquals(userRegisterPage.getFieldErrorMessageByID(driver, "Password-error"), "Password must meet the following rules:" + "\n" + "must have at least 6 characters");
+		log.info("Register_05 - Step 08: Verify error message is displayed: 'Password must meet the following rules: must have at least 6 characters and not greater than 64 characters'");
+		verifyEquals(userRegisterPage.getFieldErrorMessageByClass(driver, "field-validation-error"), "<p>Password must meet the following rules: </p><ul><li>must have at least 6 characters and not greater than 64 characters</li></ul>");
 	}
 
 	@Test

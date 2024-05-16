@@ -1,6 +1,5 @@
 package com.nopcommerce.sort;
 
-import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -8,23 +7,22 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import commons.BaseTest;
-import factoryEnvironment.Environment;
+import environmentConfig.PropertiesConfig;
 import pageObjects.user.PageGeneratorManager;
 import pageObjects.user.UserHomePageObject;
 import pageObjects.user.UserInventoryPageObject;
 
 public class SortTest extends BaseTest {
 	WebDriver driver;
-	Environment env;
+	PropertiesConfig propertiesConfig;
 	UserHomePageObject userHomePage;
 	UserInventoryPageObject userInventoryPage;
 
 	@Parameters({ "browser", "environment" })
 	@BeforeClass
 	public void beforeClass(String browserName, String environment) {
-		ConfigFactory.setProperty("env", environment.toLowerCase());
-		env = ConfigFactory.create(Environment.class);
-		driver = getBrowserDriver(browserName, env.getUserUrl());
+		propertiesConfig = PropertiesConfig.getProperties(environment);
+		driver = getBrowserDriver(browserName, propertiesConfig.getUserUrl());
 		userHomePage = PageGeneratorManager.getUserHomePage(driver);
 		userHomePage.hoverToMenuAndClickToSubmenuByTitle(driver, "Computers", "Notebooks");
 
@@ -37,7 +35,7 @@ public class SortTest extends BaseTest {
 		userInventoryPage.selectSortDropdown(driver, "Name: A to Z");
 
 		log.info("Sort_01 - Step 02: Verify product name sorted with value 'Name: A to Z'");
-		verifyTrue(userInventoryPage.isProductNameSortAscending(driver));
+		verifyTrue(userInventoryPage.isProductNameSortedAscending(driver));
 	}
 
 	@Test
@@ -46,7 +44,7 @@ public class SortTest extends BaseTest {
 		userInventoryPage.selectSortDropdown(driver, "Name: Z to A");
 
 		log.info("Sort_02 - Step 02: Verify product name sorted with value 'Name: Z to A'");
-		verifyTrue(userInventoryPage.isProductNameSortDescending(driver));
+		verifyTrue(userInventoryPage.isProductNameSortedDescending(driver));
 	}
 
 	@Test
@@ -55,7 +53,7 @@ public class SortTest extends BaseTest {
 		userInventoryPage.selectSortDropdown(driver, "Price: Low to High");
 
 		log.info("Sort_03 - Step 02: Verify product name sorted with value 'Price: Low to High'");
-		verifyTrue(userInventoryPage.isProductPriceSortAscending(driver));
+		verifyTrue(userInventoryPage.isProductPriceSortedAscending(driver));
 	}
 
 	@Test
@@ -64,7 +62,7 @@ public class SortTest extends BaseTest {
 		userInventoryPage.selectSortDropdown(driver, "Price: High to Low");
 
 		log.info("Sort_04 - Step 02: Verify product name sorted with value 'Price: High to Low'");
-		verifyTrue(userInventoryPage.isProductPriceSortDescending(driver));
+		verifyTrue(userInventoryPage.isProductPriceSortedDescending(driver));
 	}
 
 	@AfterClass(alwaysRun = true)

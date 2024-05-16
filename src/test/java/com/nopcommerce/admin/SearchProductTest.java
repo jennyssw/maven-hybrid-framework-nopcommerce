@@ -1,6 +1,5 @@
 package com.nopcommerce.admin;
 
-import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -10,7 +9,7 @@ import org.testng.annotations.Test;
 import com.nopcommerce.data.DataTest;
 
 import commons.BaseTest;
-import factoryEnvironment.Environment;
+import environmentConfig.PropertiesConfig;
 import pageObjects.admin.AdminEditProductDetailsPageObject;
 import pageObjects.admin.AdminLoginPageObject;
 import pageObjects.admin.PageGeneratorManager;
@@ -19,7 +18,7 @@ import pageObjects.admin.menu.AdminProductsPageObject;
 
 public class SearchProductTest extends BaseTest {
 	WebDriver driver;
-	Environment env;
+	PropertiesConfig propertiesConfig;
 	AdminLoginPageObject adminLoginPage;
 	AdminDashboardPageObject adminDashboardPage;
 	AdminProductsPageObject adminProductsPage;
@@ -32,9 +31,8 @@ public class SearchProductTest extends BaseTest {
 	@Parameters({ "browser", "environment" })
 	@BeforeClass
 	public void beforeClass(String browserName, String environment) {
-		ConfigFactory.setProperty("env", environment.toLowerCase());
-		env = ConfigFactory.create(Environment.class);
-		driver = getBrowserDriver(browserName, env.getAdminUrl());
+		propertiesConfig = PropertiesConfig.getProperties(environment);
+		driver = getBrowserDriver(browserName, propertiesConfig.getAdminUrl());
 
 		adminLoginPage = PageGeneratorManager.getAdminLoginPage(driver);
 		adminLoginPage.enterToTextboxByID(driver, DataTest.AdminLogin.ADMIN_EMAIL, "Email");

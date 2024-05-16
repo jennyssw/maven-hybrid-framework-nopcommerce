@@ -1,6 +1,5 @@
 package com.nopcommerce.wishlist;
 
-import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -10,7 +9,7 @@ import org.testng.annotations.Test;
 import com.nopcommerce.data.DataTest;
 
 import commons.BaseTest;
-import factoryEnvironment.Environment;
+import environmentConfig.PropertiesConfig;
 import pageObjects.user.PageGeneratorManager;
 import pageObjects.user.UserHomePageObject;
 import pageObjects.user.UserInventoryPageObject;
@@ -20,7 +19,7 @@ import pageObjects.user.header.UserRegisterPageObject;
 
 public class RecentlyViewedProductTest extends BaseTest {
 	WebDriver driver;
-	Environment env;
+	PropertiesConfig propertiesConfig;
 	UserHomePageObject userHomePage;
 	UserLoginPageObject userLoginPage;
 	UserRegisterPageObject userRegisterPage;
@@ -31,9 +30,8 @@ public class RecentlyViewedProductTest extends BaseTest {
 	@Parameters({ "browser", "environment" })
 	@BeforeClass
 	public void beforeClass(String browserName, String environment) {
-		ConfigFactory.setProperty("env", environment.toLowerCase());
-		env = ConfigFactory.create(Environment.class);
-		driver = getBrowserDriver(browserName, env.getUserUrl());
+		propertiesConfig = PropertiesConfig.getProperties(environment);
+		driver = getBrowserDriver(browserName, propertiesConfig.getUserUrl());
 
 		userHomePage = PageGeneratorManager.getUserHomePage(driver);
 		userHomePage.openLinkInHeaderByTitle(driver, "Register");
