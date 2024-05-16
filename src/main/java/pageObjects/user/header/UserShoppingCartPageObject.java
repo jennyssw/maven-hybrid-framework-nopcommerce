@@ -20,7 +20,7 @@ public class UserShoppingCartPageObject extends NavigationPageObject {
 
 	public String getTextProductDetailToShoppingCartPageByProductName(WebDriver driver, String productName) {
 		waitForElementVisible(driver, UserShoppingCartPageUI.PRODUCT_DETAIL_BY_PRODUCT_NAME, productName);
-		return getElementText(driver, UserShoppingCartPageUI.PRODUCT_DETAIL_BY_PRODUCT_NAME, productName);
+		return getElementText(driver, UserShoppingCartPageUI.PRODUCT_DETAIL_BY_PRODUCT_NAME, productName).trim();
 	}
 
 	public void clickToRemoveProductIconInShoppingCartPage(WebDriver driver, String skuNumber, String productName, String unitPrice, String quantity, String totalPrice) {
@@ -29,8 +29,8 @@ public class UserShoppingCartPageObject extends NavigationPageObject {
 	}
 
 	public boolean isShoppingCartMessageDisplayed(WebDriver driver, String message) {
-		waitForElementVisible(driver, UserShoppingCartPageUI.SHOPPING_CART_MESSAGE, message);
-		return isElementDisplayedInDOM(driver, UserShoppingCartPageUI.SHOPPING_CART_MESSAGE, message);
+		waitForElementVisible(driver, UserShoppingCartPageUI.SHOPPING_CART_MESSAGE_BY_TEXT, message);
+		return isElementDisplayedInDOM(driver, UserShoppingCartPageUI.SHOPPING_CART_MESSAGE_BY_TEXT, message);
 	}
 
 	public boolean isProductAddedToShoppingCartPageUndisplayed(WebDriver driver, String skuNumber, String productName, String unitPrice, String quantity, String totalPrice) {
@@ -38,8 +38,13 @@ public class UserShoppingCartPageObject extends NavigationPageObject {
 		return isElementUndisplayed(driver, UserShoppingCartPageUI.PRODUCT_INFO_ROW_IN_TABLE, skuNumber, productName, unitPrice, quantity, totalPrice);
 	}
 
-	public void enterToQuantityTextbox(WebDriver driver, String productNumber) {
+	public void enterToQuantityTextbox(WebDriver driver, String attributeRemove, String productNumber) {
 		waitForElementVisible(driver, UserShoppingCartPageUI.QUANTITY_TEXTBOX);
+		removeAttributeInDOM(driver, UserShoppingCartPageUI.QUANTITY_TEXTBOX, attributeRemove);
 		sendkeyToElement(driver, UserShoppingCartPageUI.QUANTITY_TEXTBOX, productNumber);
+	}
+
+	public void pressEnterToQuantityTextbox(WebDriver driver) {
+		pressEnterOrReturnKey(driver, UserShoppingCartPageUI.QUANTITY_TEXTBOX);
 	}
 }

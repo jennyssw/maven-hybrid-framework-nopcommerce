@@ -13,12 +13,12 @@ public class UserCustomerProductReviewPageObject extends SidebarNavigationPageOb
 	}
 
 	public boolean isProductReviewTitleDisplayed(WebDriver driver, String reviewTitle) {
-		waitForElementVisible(driver, UserCustomerProductReviewPageUI.REVIEW_TITLE_TEXTBOX, reviewTitle);
-		return isElementDisplayedInDOM(driver, UserCustomerProductReviewPageUI.REVIEW_TITLE_TEXTBOX, reviewTitle);
+		waitForElementVisible(driver, UserCustomerProductReviewPageUI.REVIEW_TITLE_TEXTBOX_BY_TEXT, reviewTitle);
+		return isElementDisplayedInDOM(driver, UserCustomerProductReviewPageUI.REVIEW_TITLE_TEXTBOX_BY_TEXT, reviewTitle);
 	}
 
 	public boolean isProductReviewTextDisplayed(WebDriver driver, String reviewText) {
-		waitForElementVisible(driver, UserCustomerProductReviewPageUI.REVIEW_TEXT_TEXTAREA, reviewText);
-		return isElementDisplayedInDOM(driver, UserCustomerProductReviewPageUI.REVIEW_TEXT_TEXTAREA, reviewText);
+		waitForElementVisible(driver, UserCustomerProductReviewPageUI.REVIEW_TEXT_TEXTAREA_BY_TEXT, reviewText);
+		return isElementDisplayedInDOM(driver, UserCustomerProductReviewPageUI.REVIEW_TEXT_TEXTAREA_BY_TEXT, reviewText);
 	}
 }

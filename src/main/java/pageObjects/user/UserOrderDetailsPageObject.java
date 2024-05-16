@@ -1,5 +1,7 @@
 package pageObjects.user;
 
+import java.text.ParseException;
+
 import org.openqa.selenium.WebDriver;
 
 import commons.BasePage;
@@ -18,9 +20,10 @@ public class UserOrderDetailsPageObject extends BasePage {
 		return getElementText(driver, UserOrderDetailsPageUI.ORDER_NUMBER_TEXT);
 	}
 
-	public String getTextOrderDateInOrderDetailsPage(WebDriver driver) {
+	public String getTextOrderDateInOrderDetailsPage(WebDriver driver) throws ParseException {
 		waitForElementVisible(driver, UserOrderDetailsPageUI.ORDER_DATE_TEXT);
-		return getElementText(driver, UserOrderDetailsPageUI.ORDER_DATE_TEXT);
+		String orderDate = getElementText(driver, UserOrderDetailsPageUI.ORDER_DATE_TEXT).replace("Order Date: ", "");
+		return "Order Date: " + convertCurrentDateToVietnamTimeZone(driver, orderDate);
 	}
 
 	public String getTextOrderStatusInOrderDetailsPage(WebDriver driver) {
@@ -34,28 +37,28 @@ public class UserOrderDetailsPageObject extends BasePage {
 	}
 
 	public String getTextBillingAddress(WebDriver driver, String billingAddressInfoByClassName) {
-		waitForElementVisible(driver, UserOrderDetailsPageUI.DYNAMIC_BILLING_INFO_TEXT_BY_CLASS_NAME, billingAddressInfoByClassName);
-		return getElementText(driver, UserOrderDetailsPageUI.DYNAMIC_BILLING_INFO_TEXT_BY_CLASS_NAME, billingAddressInfoByClassName).trim();
+		waitForElementVisible(driver, UserOrderDetailsPageUI.BILLING_INFO_TEXT_BY_CLASS_NAME, billingAddressInfoByClassName);
+		return getElementText(driver, UserOrderDetailsPageUI.BILLING_INFO_TEXT_BY_CLASS_NAME, billingAddressInfoByClassName).trim();
 	}
 
 	public String getTextPaymentMethod(WebDriver driver, String paymentLabelByClassName, String paymentValueByClassName) {
-		waitForElementVisible(driver, UserOrderDetailsPageUI.DYNAMIC_PAYMENT_METHOD_TEXT_BY_CLASS_NAME, paymentLabelByClassName);
-		waitForElementVisible(driver, UserOrderDetailsPageUI.DYNAMIC_PAYMENT_METHOD_TEXT_BY_CLASS_NAME, paymentValueByClassName);
-		String label = getElementText(driver, UserOrderDetailsPageUI.DYNAMIC_PAYMENT_METHOD_TEXT_BY_CLASS_NAME, paymentLabelByClassName).trim();
-		String value = getElementText(driver, UserOrderDetailsPageUI.DYNAMIC_PAYMENT_METHOD_TEXT_BY_CLASS_NAME, paymentValueByClassName).trim();
+		waitForElementVisible(driver, UserOrderDetailsPageUI.PAYMENT_METHOD_TEXT_BY_CLASS_NAME, paymentLabelByClassName);
+		waitForElementVisible(driver, UserOrderDetailsPageUI.PAYMENT_METHOD_TEXT_BY_CLASS_NAME, paymentValueByClassName);
+		String label = getElementText(driver, UserOrderDetailsPageUI.PAYMENT_METHOD_TEXT_BY_CLASS_NAME, paymentLabelByClassName).trim();
+		String value = getElementText(driver, UserOrderDetailsPageUI.PAYMENT_METHOD_TEXT_BY_CLASS_NAME, paymentValueByClassName).trim();
 		return label.concat(" ").concat(value);
 	}
 
 	public String getTextShippingAddress(WebDriver driver, String shippingAddressInfoByClassName) {
-		waitForElementVisible(driver, UserOrderDetailsPageUI.DYNAMIC_SHIPPING_INFO_TEXT_BY_CLASS_NAME, shippingAddressInfoByClassName);
-		return getElementText(driver, UserOrderDetailsPageUI.DYNAMIC_SHIPPING_INFO_TEXT_BY_CLASS_NAME, shippingAddressInfoByClassName).trim();
+		waitForElementVisible(driver, UserOrderDetailsPageUI.SHIPPING_INFO_TEXT_BY_CLASS_NAME, shippingAddressInfoByClassName);
+		return getElementText(driver, UserOrderDetailsPageUI.SHIPPING_INFO_TEXT_BY_CLASS_NAME, shippingAddressInfoByClassName).trim();
 	}
 
 	public String getTextShippingMethod(WebDriver driver, String shippingLabelByClassName, String shippingValueByClassName) {
-		waitForElementVisible(driver, UserOrderDetailsPageUI.DYNAMIC_SHIPPING_METHOD_TEXT_BY_CLASS_NAME, shippingLabelByClassName);
-		waitForElementVisible(driver, UserOrderDetailsPageUI.DYNAMIC_SHIPPING_METHOD_TEXT_BY_CLASS_NAME, shippingValueByClassName);
-		String label = getElementText(driver, UserOrderDetailsPageUI.DYNAMIC_SHIPPING_METHOD_TEXT_BY_CLASS_NAME, shippingLabelByClassName).trim();
-		String value = getElementText(driver, UserOrderDetailsPageUI.DYNAMIC_SHIPPING_METHOD_TEXT_BY_CLASS_NAME, shippingValueByClassName).trim();
+		waitForElementVisible(driver, UserOrderDetailsPageUI.SHIPPING_METHOD_TEXT_BY_CLASS_NAME, shippingLabelByClassName);
+		waitForElementVisible(driver, UserOrderDetailsPageUI.SHIPPING_METHOD_TEXT_BY_CLASS_NAME, shippingValueByClassName);
+		String label = getElementText(driver, UserOrderDetailsPageUI.SHIPPING_METHOD_TEXT_BY_CLASS_NAME, shippingLabelByClassName).trim();
+		String value = getElementText(driver, UserOrderDetailsPageUI.SHIPPING_METHOD_TEXT_BY_CLASS_NAME, shippingValueByClassName).trim();
 		return label.concat(" ").concat(value);
 	}
 
@@ -93,5 +96,9 @@ public class UserOrderDetailsPageObject extends BasePage {
 		waitForElementClickable(driver, UserOrderDetailsPageUI.REORDER_BUTTON);
 		clickToElement(driver, UserOrderDetailsPageUI.REORDER_BUTTON);
 		return PageGeneratorManager.getUserShoppingCartPage(driver);
+	}
+
+	public void ClickToSubMenuByJS(WebDriver driver) {
+		clickToElementByJS(driver, UserOrderDetailsPageUI.WEB_SUB_MENU_BY_JS);
 	}
 }

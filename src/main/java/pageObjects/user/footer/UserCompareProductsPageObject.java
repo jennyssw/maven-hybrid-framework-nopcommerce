@@ -19,8 +19,8 @@ public class UserCompareProductsPageObject extends NavigationPageObject {
 	}
 
 	public boolean isPageMessageDisplayed(WebDriver driver, String message) {
-		waitForElementVisible(driver, UserCompareProductsPageUI.PAGE_MESSAGE, message);
-		return isElementDisplayedInDOM(driver, UserCompareProductsPageUI.PAGE_MESSAGE, message);
+		waitForElementVisible(driver, UserCompareProductsPageUI.PAGE_MESSAGE_BY_TEXT, message);
+		return isElementDisplayedInDOM(driver, UserCompareProductsPageUI.PAGE_MESSAGE_BY_TEXT, message);
 	}
 
 	public boolean isProductAddedToCompareProductsPageUndisplayed(WebDriver driver, String productName1, String productName2, String unitPrice1, String unitPrice2) {

@@ -24,17 +24,17 @@ public class UserSearchPageObject extends NavigationPageObject {
 	}
 
 	public boolean isErrorMessageDisplayedByTitle(WebDriver driver, String messageTitle) {
-		waitForElementVisible(driver, UserSearchPageUI.DYNAMIC_ERROR_MESSAGE_BY_TITLE, messageTitle);
-		return isElementDisplayedInDOM(driver, UserSearchPageUI.DYNAMIC_ERROR_MESSAGE_BY_TITLE, messageTitle);
+		waitForElementVisible(driver, UserSearchPageUI.ERROR_MESSAGE_BY_TEXT, messageTitle);
+		return isElementDisplayedInDOM(driver, UserSearchPageUI.ERROR_MESSAGE_BY_TEXT, messageTitle);
 	}
 
 	public boolean isProductLinkDisplayedByTitle(WebDriver driver, String productLinkTitle) {
-		waitForElementVisible(driver, UserSearchPageUI.DYNAMIC_PRODUCT_LINK_BY_TITLE, productLinkTitle);
-		return isElementDisplayedInDOM(driver, UserSearchPageUI.DYNAMIC_PRODUCT_LINK_BY_TITLE, productLinkTitle);
+		waitForElementVisible(driver, UserSearchPageUI.PRODUCT_LINK_BY_TEXT, productLinkTitle);
+		return isElementDisplayedInDOM(driver, UserSearchPageUI.PRODUCT_LINK_BY_TEXT, productLinkTitle);
 	}
 
 	public void enterToDropdownByTitle(WebDriver driver, String dropdownValue, String dropdownTitle) {
-		waitForElementClickable(driver, UserSearchPageUI.DYNAMIC_DROPDOWN_BY_TITLE, dropdownTitle);
-		selectItemInDefaultDropdown(driver, UserSearchPageUI.DYNAMIC_DROPDOWN_BY_TITLE, dropdownValue, dropdownTitle);
+		waitForElementClickable(driver, UserSearchPageUI.DROPDOWN_BY_TEXT, dropdownTitle);
+		selectItemInDefaultDropdown(driver, UserSearchPageUI.DROPDOWN_BY_TEXT, dropdownValue, dropdownTitle);
 	}
 }

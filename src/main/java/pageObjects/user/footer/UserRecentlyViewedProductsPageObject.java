@@ -14,7 +14,7 @@ public class UserRecentlyViewedProductsPageObject extends NavigationPageObject {
 	}
 
 	public boolean isProductAddedToRecentlyViewedProductsPageDisplayed(WebDriver driver, String productName) {
-		waitForElementVisible(driver, UserRecentlyViewedProductsPageUI.DYNAMIC_PRODUCT_LINK_BY_TITLE, productName);
-		return isElementDisplayedInDOM(driver, UserRecentlyViewedProductsPageUI.DYNAMIC_PRODUCT_LINK_BY_TITLE, productName);
+		waitForElementVisible(driver, UserRecentlyViewedProductsPageUI.PRODUCT_LINK_BY_TEXT, productName);
+		return isElementDisplayedInDOM(driver, UserRecentlyViewedProductsPageUI.PRODUCT_LINK_BY_TEXT, productName);
 	}
 }

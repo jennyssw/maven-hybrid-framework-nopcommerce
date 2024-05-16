@@ -20,24 +20,24 @@ public class MenuNavigationPageObject extends BasePage {
 	}
 
 	public AdminProductsPageObject openAdminProductsPage(WebDriver driver, String menuTitle, String subMenuTitle) {
-		waitForElementClickable(driver, MenuNavigationPageUI.DYNAMIC_MENU_LINK_WITH_TITLE, menuTitle);
+		waitForElementClickable(driver, MenuNavigationPageUI.MENU_LINK_BY_TEXT, menuTitle);
 		sleepInSecond(3);
-		clickToElement(driver, MenuNavigationPageUI.DYNAMIC_MENU_LINK_WITH_TITLE, menuTitle);
+		clickToElement(driver, MenuNavigationPageUI.MENU_LINK_BY_TEXT, menuTitle);
 
-		waitForElementClickable(driver, MenuNavigationPageUI.DYNAMIC_SUB_MENU_LINK_WITH_TITLE, subMenuTitle);
-		clickToElement(driver, MenuNavigationPageUI.DYNAMIC_SUB_MENU_LINK_WITH_TITLE, subMenuTitle);
+		waitForElementClickable(driver, MenuNavigationPageUI.SUB_MENU_LINK_BY_TEXT, subMenuTitle);
+		clickToElement(driver, MenuNavigationPageUI.SUB_MENU_LINK_BY_TEXT, subMenuTitle);
 		sleepInSecond(3);
 
 		return PageGeneratorManager.getAdminProductsPage(driver);
 	}
 
 	public AdminCustomersPageObject openAdminCustomersPage(WebDriver driver, String menuTitle, String subMenuTitle) {
-		waitForElementClickable(driver, MenuNavigationPageUI.DYNAMIC_MENU_LINK_WITH_TITLE, menuTitle);
+		waitForElementClickable(driver, MenuNavigationPageUI.MENU_LINK_BY_TEXT, menuTitle);
 		sleepInSecond(3);
-		clickToElement(driver, MenuNavigationPageUI.DYNAMIC_MENU_LINK_WITH_TITLE, menuTitle);
+		clickToElement(driver, MenuNavigationPageUI.MENU_LINK_BY_TEXT, menuTitle);
 
-		waitForElementClickable(driver, MenuNavigationPageUI.DYNAMIC_SUB_MENU_LINK_WITH_TITLE, subMenuTitle);
-		clickToElement(driver, MenuNavigationPageUI.DYNAMIC_SUB_MENU_LINK_WITH_TITLE, subMenuTitle);
+		waitForElementClickable(driver, MenuNavigationPageUI.SUB_MENU_LINK_BY_TEXT, subMenuTitle);
+		clickToElement(driver, MenuNavigationPageUI.SUB_MENU_LINK_BY_TEXT, subMenuTitle);
 		sleepInSecond(3);
 
 		return PageGeneratorManager.getAdminCustomersPage(driver);

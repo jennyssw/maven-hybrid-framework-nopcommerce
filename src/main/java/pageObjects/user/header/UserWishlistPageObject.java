@@ -34,8 +34,8 @@ public class UserWishlistPageObject extends NavigationPageObject {
 	}
 
 	public boolean isPageMessageDisplayed(WebDriver driver, String message) {
-		waitForElementVisible(driver, UserWishlistPageUI.PAGE_MESSAGE, message);
-		return isElementDisplayedInDOM(driver, UserWishlistPageUI.PAGE_MESSAGE, message);
+		waitForElementVisible(driver, UserWishlistPageUI.PAGE_MESSAGE_BY_TEXT, message);
+		return isElementDisplayedInDOM(driver, UserWishlistPageUI.PAGE_MESSAGE_BY_TEXT, message);
 	}
 
 	public void clickToRemoveProductIcon(WebDriver driver, String skuNumber, String productName, String unitPrice, String quantity, String totalPrice) {

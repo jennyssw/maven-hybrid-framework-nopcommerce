@@ -13,13 +13,13 @@ public class UserHomePageObject extends BasePage {
 	}
 
 	public void openLinkInHeaderByTitle(WebDriver driver, String headerLinkByTitle) {
-		waitForElementClickable(driver, UserHomePageUI.DYNAMIC_HEADER_LINK_BY_TITILE, headerLinkByTitle);
-		clickToElement(driver, UserHomePageUI.DYNAMIC_HEADER_LINK_BY_TITILE, headerLinkByTitle);
+		waitForElementClickable(driver, UserHomePageUI.HEADER_LINK_BY_TEXT, headerLinkByTitle);
+		clickToElement(driver, UserHomePageUI.HEADER_LINK_BY_TEXT, headerLinkByTitle);
 	}
 
 	public void openLinkInFooterByTitle(WebDriver driver, String footerLinkByTitle) {
-		waitForElementClickable(driver, UserHomePageUI.DYNAMIC_FOOTER_LINK_BY_TITILE, footerLinkByTitle);
-		clickToElement(driver, UserHomePageUI.DYNAMIC_FOOTER_LINK_BY_TITILE, footerLinkByTitle);
+		waitForElementClickable(driver, UserHomePageUI.FOOTER_LINK_BY_TEXT, footerLinkByTitle);
+		clickToElement(driver, UserHomePageUI.FOOTER_LINK_BY_TEXT, footerLinkByTitle);
 	}
 
 	public boolean isTopicTitleUserHomePageDisplayed(WebDriver driver) {

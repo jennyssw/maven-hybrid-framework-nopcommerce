@@ -1,11 +1,6 @@
 package pageObjects.user;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import commons.BasePage;
 import commons.GlobalConstants;
@@ -30,88 +25,34 @@ public class UserInventoryPageObject extends BasePage {
 		sleepInSecond(GlobalConstants.SHORT_TIMEOUT);
 	}
 
-	public boolean isProductNameSortAscending(WebDriver driver) {
+	public boolean isProductNameSortedAscending(WebDriver driver) {
 		waitForElementAllVisible(driver, UserInventoryPageUI.PRODUCT_NAME);
-
-		List<WebElement> productName = getListElement(driver, UserInventoryPageUI.PRODUCT_NAME);
-		List<String> productNameTextUI = new ArrayList<String>();
-
-		for (WebElement product : productName) {
-			productNameTextUI.add(product.getText());
-		}
-
-		List<String> productNameTextSort = new ArrayList<String>(productNameTextUI);
-		Collections.sort(productNameTextSort);
-
-		return productNameTextSort.equals(productNameTextUI);
+		return isElementSortedAscendingByString(driver, UserInventoryPageUI.PRODUCT_NAME);
 	}
 
-	public boolean isProductNameSortDescending(WebDriver driver) {
+	public boolean isProductNameSortedDescending(WebDriver driver) {
 		waitForElementAllVisible(driver, UserInventoryPageUI.PRODUCT_NAME);
-
-		List<WebElement> productName = getListElement(driver, UserInventoryPageUI.PRODUCT_NAME);
-		List<String> productNameTextUI = new ArrayList<String>();
-
-		for (WebElement product : productName) {
-			productNameTextUI.add(product.getText());
-		}
-
-		List<String> productNameTextSort = new ArrayList<String>(productNameTextUI);
-		Collections.sort(productNameTextSort);
-		Collections.reverse(productNameTextSort);
-
-		return productNameTextSort.equals(productNameTextUI);
+		return isElementSortedDescendingByString(driver, UserInventoryPageUI.PRODUCT_NAME);
 	}
 
-	public boolean isProductPriceSortAscending(WebDriver driver) {
+	public boolean isProductPriceSortedAscending(WebDriver driver) {
 		waitForElementAllVisible(driver, UserInventoryPageUI.PRODUCT_PRICE);
-
-		List<WebElement> productPrice = getListElement(driver, UserInventoryPageUI.PRODUCT_PRICE);
-		List<Float> productPriceTextUI = new ArrayList<Float>();
-
-		for (WebElement product : productPrice) {
-			productPriceTextUI.add(Float.valueOf(product.getText().replace("$", "").replace(",", "")));
-		}
-
-		List<Float> productPriceTextSort = new ArrayList<Float>(productPriceTextUI);
-		Collections.sort(productPriceTextSort);
-
-		return productPriceTextSort.equals(productPriceTextUI);
+		return isElementSortedAscendingByFloat(driver, UserInventoryPageUI.PRODUCT_PRICE);
 	}
 
-	public boolean isProductPriceSortDescending(WebDriver driver) {
+	public boolean isProductPriceSortedDescending(WebDriver driver) {
 		waitForElementAllVisible(driver, UserInventoryPageUI.PRODUCT_PRICE);
-
-		List<WebElement> productPrice = getListElement(driver, UserInventoryPageUI.PRODUCT_PRICE);
-		List<Float> productPriceTextUI = new ArrayList<Float>();
-
-		for (WebElement product : productPrice) {
-			productPriceTextUI.add(Float.valueOf(product.getText().replace("$", "").replace(",", "")));
-		}
-
-		List<Float> productPriceTextSort = new ArrayList<Float>(productPriceTextUI);
-		Collections.sort(productPriceTextSort);
-		Collections.reverse(productPriceTextSort);
-
-		return productPriceTextSort.equals(productPriceTextUI);
+		return isElementSortedDescendingByFloat(driver, UserInventoryPageUI.PRODUCT_PRICE);
 	}
 
 	public boolean isProductNumberDisplayed(WebDriver driver, String productNumber) {
 		waitForElementAllVisible(driver, UserInventoryPageUI.PRODUCT_NAME);
-
-		List<WebElement> productName = getListElement(driver, UserInventoryPageUI.PRODUCT_NAME);
-		int actualProductNumber = productName.size();
-		int expectedProductNumber = Integer.parseInt(productNumber);
-
-		if (actualProductNumber == expectedProductNumber || actualProductNumber < expectedProductNumber) {
-			return true;
-		} else
-			return false;
+		return isElementNumberDisplayed(driver, UserInventoryPageUI.PRODUCT_NAME, productNumber);
 	}
 
 	public boolean isPagerIconByTitleDisplayed(WebDriver driver, String titleIcon) {
-		waitForElementVisible(driver, UserInventoryPageUI.DYNAMIC_PAGER_ICON_BY_TITLE, titleIcon);
-		return isElementDisplayedInDOM(driver, UserInventoryPageUI.DYNAMIC_PAGER_ICON_BY_TITLE, titleIcon);
+		waitForElementVisible(driver, UserInventoryPageUI.PAGER_ICON_BY_TEXT, titleIcon);
+		return isElementDisplayedInDOM(driver, UserInventoryPageUI.PAGER_ICON_BY_TEXT, titleIcon);
 	}
 
 	public boolean isPagingAreaNotDisplayed(WebDriver driver) {
@@ -120,7 +61,7 @@ public class UserInventoryPageObject extends BasePage {
 	}
 
 	public void clickToLinkByTitleInInventoryPage(WebDriver driver, String linkTitle) {
-		waitForElementClickable(driver, UserInventoryPageUI.DYNAMIC_PRODUCT_LINK_BY_TITLE, linkTitle);
-		clickToElement(driver, UserInventoryPageUI.DYNAMIC_PRODUCT_LINK_BY_TITLE, linkTitle);
+		waitForElementClickable(driver, UserInventoryPageUI.PRODUCT_LINK_BY_TEXT, linkTitle);
+		clickToElement(driver, UserInventoryPageUI.PRODUCT_LINK_BY_TEXT, linkTitle);
 	}
 }
