@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 import com.nopcommerce.data.DataTest;
 
 import commons.BaseTest;
-import environmentConfig.PropertiesConfig;
+import config.environmentConfig.PropertiesConfig;
 import pageObjects.user.PageGeneratorManager;
 import pageObjects.user.UserCheckoutPageObject;
 import pageObjects.user.UserHomePageObject;

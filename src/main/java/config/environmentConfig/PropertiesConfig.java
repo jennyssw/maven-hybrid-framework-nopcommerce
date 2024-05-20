@@ -1,4 +1,4 @@
-package environmentConfig;
+package config.environmentConfig;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import com.nopcommerce.data.DataTest;
 
 import commons.BaseTest;
-import environmentConfig.PropertiesConfig;
+import config.environmentConfig.PropertiesConfig;
 import pageObjects.admin.AdminEditProductDetailsPageObject;
 import pageObjects.admin.AdminLoginPageObject;
 import pageObjects.admin.PageGeneratorManager;

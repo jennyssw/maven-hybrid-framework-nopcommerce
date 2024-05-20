@@ -1,4 +1,4 @@
-package logConfig;
+package config.logConfig;
 
 import java.io.Serializable;
 

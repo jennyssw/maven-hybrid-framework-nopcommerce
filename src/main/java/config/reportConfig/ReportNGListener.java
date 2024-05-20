@@ -1,4 +1,4 @@
-package reportConfig;
+package config.reportConfig;
 
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.OutputType;
