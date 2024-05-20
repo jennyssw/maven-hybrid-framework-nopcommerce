@@ -1,4 +1,4 @@
-package commons;
+package logConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
